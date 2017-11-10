@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <dimen name="shot_author_picture_size">48dp</dimen>
+    <dimen name="shot_author_picture_radius">24dp</dimen>
+
+    <dimen name="spacing_medium">16dp</dimen>
+</resources>
