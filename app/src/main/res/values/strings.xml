@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">My_Dribbble</string>
+
+    <string name="drawer_menu_home">Home</string>
+    <string name="drawer_menu_likes">Likes</string>
+    <string name="drawer_menu_buckets">Buckets</string>
+
+    <string name="drawer_menus_home_title">Dribbble</string>
+    <string name="drawer_menus_like_title">Like</string>
+    <string name="drawer_menus_bucket_title">Bucket</string>
+
+    <string name="open_drawer">open drawer</string>
+    <string name="close_drawer">close drawer</string>
 </resources>

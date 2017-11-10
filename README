@@ -24,3 +24,15 @@ Fragment
 Butter Knife
     in activity, we use "ButterKnife.bind(this)"
     in fragment and view holder, we use "ButterKnife.bind(this, itemView)"
+
+===================================================================================
+
+add navigation drawer
+
+add compile 'com.android.support:design:26.+' in gradle file
+
+in activity_main.xml, use Drawer layout to wrap the frame layout
+and the NavigationView is the content of the drawer
+
+the content of drawer contains two parts: menus and header
+
