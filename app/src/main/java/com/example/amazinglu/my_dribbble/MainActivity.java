@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.amazinglu.my_dribbble.bucket_list.BucketListFragment;
 import com.example.amazinglu.my_dribbble.shot_list.ShotListFragment;
 
 import butterknife.BindView;
@@ -116,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                         setTitle(R.string.drawer_menus_like_title);
                         break;
                     case R.id.drawer_item_buckets:
-                        fragment = ShotListFragment.newInstance();
+                        fragment = BucketListFragment.newInstance();
                         setTitle(R.string.drawer_menus_bucket_title);
                         break;
                 }
