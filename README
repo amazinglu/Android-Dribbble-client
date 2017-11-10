@@ -31,8 +31,23 @@ add navigation drawer
 
 add compile 'com.android.support:design:26.+' in gradle file
 
-in activity_main.xml, use Drawer layout to wrap the frame layout
-and the NavigationView is the content of the drawer
+the layout file
+    in activity_main.xml, use Drawer layout to wrap the frame layout
+    and the NavigationView is the content of the drawer
 
-the content of drawer contains two parts: menus and header
+    the content of drawer contains two parts: menus and header
+
+backend handle
+    use "navigationView.setNavigationItemSelectedListener" to set menus里面的每一个item的点击事件
+        create a new fragment for the container
+        set a new title of the application
+
+    close the drawer after click
+
+    replace the new fragment
+
+    implement the sandwich button
+        use "ActionBarDrawerToggle" as the listener of open and close drawer
+        use "onPostCreate", "onConfigurationChanged" and "onOptionsItemSelected"
+        来激活点击事件和更新状态的改变
 
