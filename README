@@ -1,0 +1,26 @@
+shot list
+
+1. layout (fragment and recycler view)
+
+use Frame layout as a container of fragment
+
+fragment itself is a recycler view
+
+List_item_shot is the content of the recycler view
+    让每一个卡片有阴影 => use the Card view wrap the whole layout
+    让View, like and count 靠右 => 用relative layout
+    让Text View 有图标 => use drawable left and drawable padding
+
+set the padding of every element in the recycler view
+    use RecyclerView.ItemDecoration
+        over ride function "getItemOffsets"
+        set the "outRect"
+
+Fragment
+    initialize the fragment in main activity
+    use "onCreateView" to inflate the fragment layout (fragment_recycler_view)
+    use "onViewCreated" to set the content or data of each view
+
+Butter Knife
+    in activity, we use "ButterKnife.bind(this)"
+    in fragment and view holder, we use "ButterKnife.bind(this, itemView)"

@@ -12,12 +12,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /**
+         * savedInstanceState:
+         * a Bundle object containing the activity's previously saved state.
+         * If the activity has never existed before, the value of the Bundle object is null
+         * */
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.fragment_container, ShotListFragment.newInstance())
                     .commit();
-
         }
     }
 }
