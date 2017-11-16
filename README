@@ -51,3 +51,25 @@ backend handle
         use "onPostCreate", "onConfigurationChanged" and "onOptionsItemSelected"
         来激活点击事件和更新状态的改变
 
+
+=======================================
+
+add tool bar
+
+1. use the tool bar to replace the action bar
+    - in styles.xml, set <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        => disable the action bar
+    - add the tool bar to activity_main.xml
+    - in onCreate function, set the tool bar to be action bar
+        => setSupportActionBar(toolbar);
+
+2. make the status bar 透明
+    - add <item name="android:windowTranslucentStatus">true</item> to styles.xml
+        => this feature can only be used above API 19
+        => so we create a styles.xml in the directory of values-v19
+
+    - add android:minHeight="?attr/actionBarSize"
+          android:fitsSystemWindows="true"         to toolbar view
+          => tool bar then will adjust its position base on status bar's height
+
+3. for more details, look at "use tool bar.txt"

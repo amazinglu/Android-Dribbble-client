@@ -1,0 +1,67 @@
+video 1
+
+1. disable action bar
+
+2. add tool bar to layout file
+
+details of tool bar layout:
+
+?attr/colorPrimary => 当前程序主题的color primary
+				   => 在 styles.xml 中
+
+android:elevation: 浮动的高度
+android:theme 
+=》 深色的底会自动有浅色的文字
+android:popuptheme: 自己探索
+
+3. 在 onCreate 中，设置tool bar
+=> 要在setContenetView 之后设置
+=》 事实上是把acton bar 换成了 tool bar
+
+==================================
+
+video 2
+
+drawer layout 只能有两个孩子
+=》 用linaer layout  包括tool bar and Frame layout
+
+Linaer layout 特性
+如果只有两个孩子 => 一个孩子固定高度，另外一个孩子match_parent
+这个孩子就会自定填充剩余的高度
+
+tools bar 变成了主体的一部分，所以drawer可以遮住tool bar
+
+drawer 可以延展到状态栏的后面
+	=》 如何将status bar 变成透明
+
+	 change the color of status bar
+	 => style.xml colorPrimaryDark 决定status bar 颜色
+
+	 API 19 => Android 4.4
+	 之前的版本不支持透明	status bar
+
+	 new 一个 styles.xml with Directory name of values-v19
+	 => 在系统的版本是v19或以上的时候才使用v19下目录的值
+	 将变透明的那条语句放到这个style文件中
+
+	 toolbar 陷到status bar里面了
+	 改一下toolbar 的高度
+
+	 但是三明治和文字的位置还是不对
+	 =》 给tool bar 加一个padingtop， 高度是warp_content
+
+	 但是paddingtop 现在是一个写死的值
+	 =》 不是一个持久之计
+
+	 给toolbar一个main hieght =》 最低的高度
+	 然后fitsSystemWindow == true =》 toolbar自动根据status bar 的高度去调整了
+
+把 header 做好看一点
+
+
+
+
+
+
+
+
