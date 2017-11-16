@@ -11,4 +11,8 @@
     <dimen name="spacing_large">24dp</dimen>
 
     <dimen name="fab_magin">16dp</dimen>
+
+    <dimen name="toolbar_elevation">4dp</dimen>
+
+    <dimen name="drawer_header_height">192dp</dimen>
 </resources>

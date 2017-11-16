@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.example.amazinglu.my_dribbble.bucket_list.BucketListFragment;
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.drawer) NavigationView navigationView;
     @BindView(R.id.drawer_layout) DrawerLayout drawerLayout;
+    @BindView(R.id.toolbar) Toolbar toolbar;
 
     private ActionBarDrawerToggle drawerToggle;
 
@@ -32,7 +34,11 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         // enable the back button on the action bar
-        // which is for sandwich button
+        // which is for sandwich
+        /**
+         * set the acton bar as tool bar
+         * */
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
