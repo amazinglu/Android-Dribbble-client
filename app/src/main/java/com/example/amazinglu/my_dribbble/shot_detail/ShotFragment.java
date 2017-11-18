@@ -19,10 +19,6 @@ import com.google.gson.reflect.TypeToken;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by AmazingLu on 11/17/17.
- */
-
 public class ShotFragment extends Fragment {
 
     @BindView(R.id.recycle_view) RecyclerView recyclerView;

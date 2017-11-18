@@ -1,5 +1,7 @@
 package com.example.amazinglu.my_dribbble.model;
 
+import android.support.annotation.NonNull;
+
 import java.util.Date;
 import java.util.Map;
 
@@ -8,6 +10,9 @@ import java.util.Map;
  */
 
 public class Shot {
+
+    public static final String IMAGE_NORMAL = "normal";
+    public static final String IMAGE_HIDPI = "hidpi";
 
     public String id;
     public String title;
@@ -29,4 +34,17 @@ public class Shot {
     public boolean bucketed;
 
     public User user;
+
+    @NonNull
+    public String getImageUrl() {
+        if (images == null) {
+            return null;
+        } else if (animated) {
+            return images.get(IMAGE_NORMAL);
+        } else {
+            return images.containsKey(IMAGE_HIDPI)
+                    ? images.get(IMAGE_HIDPI)
+                    : images.get(IMAGE_NORMAL);
+        }
+    }
 }

@@ -102,3 +102,12 @@ load the date in the background thread
         - load more data and pass the data to adapter (append method)
         - see if we still need the next load
             => in the current demo we assumes that there are 50 shot lists and each page has 20 lists
+
+=================================================
+
+use picasso to download image and place it into image view
+
+Picasso.with(holder.itemView.getContext())
+                        .load(shot.getImageUrl())   // load the image from url
+                        .placeholder(R.drawable.shot_placeholder)    // if no image load, use palceholder
+                        .into(((ImageViewHolder) holder).image);    // out the iamge into image view
