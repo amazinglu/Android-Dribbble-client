@@ -12,6 +12,9 @@ import android.view.ViewGroup;
 import com.example.amazinglu.my_dribbble.R;
 import com.example.amazinglu.my_dribbble.model.Shot;
 import com.example.amazinglu.my_dribbble.shot_detail.ShotActivity;
+import com.example.amazinglu.my_dribbble.shot_detail.ShotFragment;
+import com.example.amazinglu.my_dribbble.utils.ModelUtils;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.List;
 
@@ -67,6 +70,9 @@ public class ShotListAdapter extends RecyclerView.Adapter {
                 public void onClick(View view) {
                     Context context = holder.itemView.getContext();
                     Intent intent = new Intent(context, ShotActivity.class);
+                    // use JSON to transit object through activities
+                    intent.putExtra(ShotFragment.KEY_SHOT,
+                            ModelUtils.toString(shot, new TypeToken<Shot>(){}));
                     intent.putExtra(ShotActivity.KEY_SHOT_TITLE, shot.title);
                     context.startActivity(intent);
                 }
