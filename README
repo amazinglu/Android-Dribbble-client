@@ -73,3 +73,9 @@ add tool bar
           => tool bar then will adjust its position base on status bar's height
 
 3. for more details, look at "use tool bar.txt"
+
+* the onCreateViewHolder(create the view holder) and onBindViewHolder(bind the data) qill be call by
+    the "getView" function in the recycler view
+* we need to define the getViewType(int position) function to tell the "getView" function how to
+    define the view type
+* the getItemCount() function tells the "getView" function the number of positions

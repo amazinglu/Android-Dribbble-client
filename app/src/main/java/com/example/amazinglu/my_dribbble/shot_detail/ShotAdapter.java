@@ -65,6 +65,9 @@ public class ShotAdapter extends RecyclerView.Adapter {
         return 2;
     }
 
+    /**
+     * here define the view type
+     * */
     @Override
     public int getItemViewType(int position) {
         if (position == 0) {

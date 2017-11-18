@@ -21,42 +21,64 @@ import java.util.List;
 
 public class ShotListAdapter extends RecyclerView.Adapter {
 
+    private static final int VIEW_TYPE_SHOT = 1;
+    private static final int VIEW_TYPE_LOADING = 2;
+
     private List<Shot> data;
+    private boolean showLoading;
 
     public ShotListAdapter(@NonNull List<Shot> data) {
         this.data = data;
+        this.showLoading = true;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).
-                inflate(R.layout.list_item_shot, parent, false);
-        return new ShotViewHolder(view);
+        if (viewType == VIEW_TYPE_SHOT) {
+            View view = LayoutInflater.from(parent.getContext()).
+                    inflate(R.layout.list_item_shot, parent, false);
+            return new ShotViewHolder(view);
+        } else {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.list_item_loading, parent, false);
+            // since no view is in this view holder, use the system view holder is fine
+            return new RecyclerView.ViewHolder(view) {};
+        }
     }
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
-        final Shot shot = data.get(position);
-        ShotViewHolder shotViewHolder = (ShotViewHolder) holder;
-        shotViewHolder.likeCount.setText(String.valueOf(shot.likes_count));
-        shotViewHolder.bucketCount.setText(String.valueOf(shot.buckets_count));
-        shotViewHolder.viewCount.setText(String.valueOf(shot.views_count));
-        shotViewHolder.image.setImageResource(R.drawable.shot_placeholder);
+        final int viewType = getItemViewType(position);
+        if (viewType == VIEW_TYPE_LOADING) {
 
-        // listener for clicking the shot list
-        shotViewHolder.cover.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Context context = holder.itemView.getContext();
-                Intent intent = new Intent(context, ShotActivity.class);
-                intent.putExtra(ShotActivity.KEY_SHOT_TITLE, shot.title);
-                context.startActivity(intent);
-            }
-        });
+        } else {
+            final Shot shot = data.get(position);
+            ShotViewHolder shotViewHolder = (ShotViewHolder) holder;
+            shotViewHolder.likeCount.setText(String.valueOf(shot.likes_count));
+            shotViewHolder.bucketCount.setText(String.valueOf(shot.buckets_count));
+            shotViewHolder.viewCount.setText(String.valueOf(shot.views_count));
+            shotViewHolder.image.setImageResource(R.drawable.shot_placeholder);
+
+            // listener for clicking the shot list
+            shotViewHolder.cover.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Context context = holder.itemView.getContext();
+                    Intent intent = new Intent(context, ShotActivity.class);
+                    intent.putExtra(ShotActivity.KEY_SHOT_TITLE, shot.title);
+                    context.startActivity(intent);
+                }
+            });
+        }
     }
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return showLoading ? data.size() + 1 : data.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position < data.size() ? VIEW_TYPE_SHOT : VIEW_TYPE_LOADING;
     }
 }
