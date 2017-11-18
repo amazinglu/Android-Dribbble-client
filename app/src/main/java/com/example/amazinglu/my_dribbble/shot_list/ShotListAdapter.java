@@ -26,10 +26,12 @@ public class ShotListAdapter extends RecyclerView.Adapter {
 
     private List<Shot> data;
     private boolean showLoading;
+    private LoadMoreListener loadMoreListener;
 
-    public ShotListAdapter(@NonNull List<Shot> data) {
+    public ShotListAdapter(@NonNull List<Shot> data, @NonNull LoadMoreListener loadMoreListener) {
         this.data = data;
         this.showLoading = true;
+        this.loadMoreListener = loadMoreListener;
     }
 
     @Override
@@ -50,7 +52,7 @@ public class ShotListAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         final int viewType = getItemViewType(position);
         if (viewType == VIEW_TYPE_LOADING) {
-
+            loadMoreListener.onLoadMore();
         } else {
             final Shot shot = data.get(position);
             ShotViewHolder shotViewHolder = (ShotViewHolder) holder;
@@ -80,5 +82,25 @@ public class ShotListAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
         return position < data.size() ? VIEW_TYPE_SHOT : VIEW_TYPE_LOADING;
+    }
+
+    public interface LoadMoreListener {
+        void onLoadMore();
+    }
+
+    public void append(@NonNull List<Shot> moreShots) {
+        data.addAll(moreShots);
+        // call the adapter to update the view
+        notifyDataSetChanged();
+    }
+
+    public int getDataCount() {
+        return data.size();
+    }
+
+    public void setShowLoading(boolean showLoading) {
+        this.showLoading = showLoading;
+        // if the showLoading changes, no more loading will be exist
+        notifyDataSetChanged();
     }
 }
