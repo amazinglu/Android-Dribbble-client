@@ -15,4 +15,7 @@
     <dimen name="toolbar_elevation">4dp</dimen>
 
     <dimen name="drawer_header_height">192dp</dimen>
+
+    <dimen name="shot_action_icon_size">32dp</dimen>
+    <dimen name="shot_action_drawable_top_icon_padding">7dp</dimen>
 </resources>

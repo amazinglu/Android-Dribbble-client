@@ -13,4 +13,9 @@
     <string name="close_drawer">close drawer</string>
 
     <string name="shot_count">{0,choice,0#0 shot|1#1 shot|1&lt;{0} shots}</string>
+
+    <string name="bucket">Bucket</string>
+    <string name="like">Like</string>
+    <string name="share">Share</string>
+    <string name="shot_author_picture">Shot author picture</string>
 </resources>
