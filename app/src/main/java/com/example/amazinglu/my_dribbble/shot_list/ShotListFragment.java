@@ -53,6 +53,9 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
         recyclerView.addItemDecoration(new SpaceItemdecoration(
                 getResources().getDimensionPixelSize(R.dimen.spacing_medium)));
 
+        /**
+         * load more data at a thread
+         * */
         final android.os.Handler handler = new android.os.Handler();
         adapter = new ShotListAdapter(fakeData(0), new ShotListAdapter.LoadMoreListener() {
             @Override

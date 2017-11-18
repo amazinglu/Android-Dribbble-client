@@ -79,3 +79,26 @@ add tool bar
 * we need to define the getViewType(int position) function to tell the "getView" function how to
     define the view type
 * the getItemCount() function tells the "getView" function the number of positions
+
+===============================================
+
+infinite loading list
+
+implement the loading progressive bar
+
+    layout of progressive bar
+
+    mix type adapter again
+    when the position is < data.size() => load the shot (list_item_shot layout)
+    when the position is == data.size() => load the progressive bar (list_item_loading layout)
+
+load the date in the background thread
+
+    when viewType == VIEW_TYPE_LOADING, the adapter need to actually the data somewhere
+    => use onLoadMore() method to load more data
+
+    when we create the adapter in fragment, we define the onLoadMore method
+
+        - load more data and pass the data to adapter (append method)
+        - see if we still need the next load
+            => in the current demo we assumes that there are 50 shot lists and each page has 20 lists

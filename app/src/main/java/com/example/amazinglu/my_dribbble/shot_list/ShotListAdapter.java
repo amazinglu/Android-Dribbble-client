@@ -79,6 +79,9 @@ public class ShotListAdapter extends RecyclerView.Adapter {
         return showLoading ? data.size() + 1 : data.size();
     }
 
+    /**
+     * set the view type of the adapter
+     * */
     @Override
     public int getItemViewType(int position) {
         return position < data.size() ? VIEW_TYPE_SHOT : VIEW_TYPE_LOADING;
