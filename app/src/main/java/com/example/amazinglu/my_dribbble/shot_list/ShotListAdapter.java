@@ -9,13 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
 import com.example.amazinglu.my_dribbble.R;
 import com.example.amazinglu.my_dribbble.model.Shot;
 import com.example.amazinglu.my_dribbble.shot_detail.ShotActivity;
 import com.example.amazinglu.my_dribbble.shot_detail.ShotFragment;
 import com.example.amazinglu.my_dribbble.utils.ModelUtils;
 import com.google.gson.reflect.TypeToken;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -65,7 +65,7 @@ public class ShotListAdapter extends RecyclerView.Adapter {
             shotViewHolder.viewCount.setText(String.valueOf(shot.views_count));
             shotViewHolder.image.setImageResource(R.drawable.shot_placeholder);
 
-            Picasso.with(holder.itemView.getContext())
+            Glide.with(holder.itemView.getContext())
                     .load(shot.getImageUrl())
                     .placeholder(R.drawable.shot_placeholder)
                     .into(shotViewHolder.image);

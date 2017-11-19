@@ -5,9 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
 import com.example.amazinglu.my_dribbble.R;
 import com.example.amazinglu.my_dribbble.model.Shot;
-import com.squareup.picasso.Picasso;
 
 /**
  * Created by AmazingLu on 11/17/17.
@@ -49,7 +49,7 @@ public class ShotAdapter extends RecyclerView.Adapter {
                 /**
                  * download the image and put it into the image view using Picasso
                  * */
-                Picasso.with(holder.itemView.getContext())
+                Glide.with(holder.itemView.getContext())
 //                        .load("http://i.imgur.com/DvpvklR.png")
                         .load(shot.getImageUrl())
                         .placeholder(R.drawable.shot_placeholder)

@@ -111,3 +111,6 @@ Picasso.with(holder.itemView.getContext())
                         .load(shot.getImageUrl())   // load the image from url
                         .placeholder(R.drawable.shot_placeholder)    // if no image load, use palceholder
                         .into(((ImageViewHolder) holder).image);    // out the iamge into image view
+
+use glide to download image and place it into image view
+    - same as picasso
