@@ -114,3 +114,15 @@ Picasso.with(holder.itemView.getContext())
 
 use glide to download image and place it into image view
     - same as picasso
+
+use fresco to download image and place it into image view
+    - need to initialize Fresco
+        - can only be initialize once
+        - create a name for the applicaiton
+        - create a class that have the same name of the application
+        - initialize Frecso in the onCreate function of this class
+
+    - fresco use SimpleDraweeView
+        - change all the IamgeView to impleDraweeView
+
+    - add fresco to the adapter (same as Gilde and Picasso)

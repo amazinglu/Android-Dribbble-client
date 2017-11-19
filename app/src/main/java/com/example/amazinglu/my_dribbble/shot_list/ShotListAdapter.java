@@ -2,6 +2,7 @@ package com.example.amazinglu.my_dribbble.shot_list;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.RecyclerView;
@@ -15,13 +16,11 @@ import com.example.amazinglu.my_dribbble.model.Shot;
 import com.example.amazinglu.my_dribbble.shot_detail.ShotActivity;
 import com.example.amazinglu.my_dribbble.shot_detail.ShotFragment;
 import com.example.amazinglu.my_dribbble.utils.ModelUtils;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.List;
-
-/**
- * Created by AmazingLu on 11/9/17.
- */
 
 public class ShotListAdapter extends RecyclerView.Adapter {
 
@@ -65,10 +64,11 @@ public class ShotListAdapter extends RecyclerView.Adapter {
             shotViewHolder.viewCount.setText(String.valueOf(shot.views_count));
             shotViewHolder.image.setImageResource(R.drawable.shot_placeholder);
 
-            Glide.with(holder.itemView.getContext())
-                    .load(shot.getImageUrl())
-                    .placeholder(R.drawable.shot_placeholder)
-                    .into(shotViewHolder.image);
+            DraweeController controller = Fresco.newDraweeControllerBuilder()
+                    .setUri(Uri.parse(shot.getImageUrl()))
+                    .setAutoPlayAnimations(true)
+                    .build();
+            shotViewHolder.image.setController(controller);
 
             // listener for clicking the shot list
             shotViewHolder.cover.setOnClickListener(new View.OnClickListener() {
