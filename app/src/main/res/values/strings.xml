@@ -18,4 +18,6 @@
     <string name="like">Like</string>
     <string name="share">Share</string>
     <string name="shot_author_picture">Shot author picture</string>
+
+    <string name="auth_login_title">Log into Dribbble</string>
 </resources>

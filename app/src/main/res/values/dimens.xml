@@ -21,4 +21,8 @@
 
     <dimen name="loading_porogress_bar_size">24dp</dimen>
     <dimen name="loading_item_height">36dp</dimen>
+
+    <dimen name="login_image_size">72dp</dimen>
+
+    <dimen name="oauth_progressiveBar_height">2dp</dimen>
 </resources>

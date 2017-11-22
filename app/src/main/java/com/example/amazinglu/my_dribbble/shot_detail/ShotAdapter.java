@@ -12,9 +12,6 @@ import com.example.amazinglu.my_dribbble.model.Shot;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
 
-/**
- * Created by AmazingLu on 11/17/17.
- */
 
 public class ShotAdapter extends RecyclerView.Adapter {
 

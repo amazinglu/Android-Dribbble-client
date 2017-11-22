@@ -6,4 +6,5 @@ package com.example.amazinglu.my_dribbble.model;
 
 public class User {
     public String name;
+    public String avatar_url;
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
+
+    <ImageView
+        android:layout_width="@dimen/login_image_size"
+        android:layout_height="@dimen/login_image_size"
+        android:src="@mipmap/ic_launcher"
+        android:contentDescription="Dribbble icon"/>
+
+    <TextView
+        android:id="@+id/activity_login_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_medium"
+        android:text="Log into Dribbble"
+        style="@style/AppTheme.TextView.Clickable.2.White"/>
+
+</LinearLayout>
