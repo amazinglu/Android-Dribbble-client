@@ -5,12 +5,14 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.example.amazinglu.my_dribbble.model.Like;
 import com.example.amazinglu.my_dribbble.model.Shot;
 import com.example.amazinglu.my_dribbble.model.User;
 import com.example.amazinglu.my_dribbble.utils.ModelUtils;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.OkHttpClient;
@@ -35,6 +37,7 @@ public class DribbbleFunc {
 
     private static final TypeToken<User> USER_TYPE = new TypeToken<User>(){};
     private static final TypeToken<List<Shot>> SHOT_LIST_TYPE = new TypeToken<List<Shot>>(){};
+    private static final TypeToken<List<Like>> LIKE_LIST_TYPE = new TypeToken<List<Like>>(){};
 
     private static String accessToken;
     private static User user;
@@ -139,6 +142,20 @@ public class DribbbleFunc {
     public static List<Shot> getShots(int page) throws IOException {
         String url = SHOTS_END_POINT + "?page=" + page;
         return parseResponse(makeGetRequest(url), SHOT_LIST_TYPE);
+    }
+
+    public static List<Like> getLikes(int page) throws IOException {
+        String url = USER_END_POINT + "/likes?page=" + page;
+        return parseResponse(makeGetRequest(url), LIKE_LIST_TYPE);
+    }
+
+    public static List<Shot> getLikedShots(int page) throws IOException {
+        List<Like> likes = getLikes(page);
+        List<Shot> likedShots = new ArrayList<>();
+        for (Like like : likes) {
+            likedShots.add(like.shot);
+        }
+        return likedShots;
     }
 
 }

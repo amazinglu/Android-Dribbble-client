@@ -34,15 +34,26 @@ import butterknife.ButterKnife;
 
 public class ShotListFragment extends android.support.v4.app.Fragment {
 
+    public static final String KEY_LIST_TYPE = "listType";
+
+    public static final int LIST_TYPE_POPULAR = 1;
+    public static final int LIST_TYPE_LIKED = 2;
+
     @BindView(R.id.recycle_view) RecyclerView recyclerView;
     @BindView(R.id.recycler_view_refresh_container) SwipeRefreshLayout swipeRefreshLayout;
 
     private static final int COUNT_PER_PAGE = 12;
 
     private ShotListAdapter adapter;
+    private int listType;
 
-    public static ShotListFragment newInstance() {
-        return new ShotListFragment();
+    public static ShotListFragment newInstance(int listType) {
+        Bundle args = new Bundle();
+        args.putInt(KEY_LIST_TYPE, listType);
+
+        ShotListFragment shotListFragment = new ShotListFragment();
+        shotListFragment.setArguments(args);
+        return shotListFragment;
     }
 
     @Nullable
@@ -57,13 +68,11 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.addItemDecoration(new SpaceItemdecoration(
-                getResources().getDimensionPixelSize(R.dimen.spacing_medium)));
+        // get the listType
+        listType = getArguments().getInt(KEY_LIST_TYPE);
 
         // disable the refresh when first load the fragment
         swipeRefreshLayout.setEnabled(false);
-
         /**
          * set the listener of refresh layout
          * */
@@ -75,6 +84,9 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
             }
         });
 
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.addItemDecoration(new SpaceItemdecoration(
+                getResources().getDimensionPixelSize(R.dimen.spacing_medium)));
 
         /**
          * load more data at a thread
@@ -82,7 +94,8 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
         adapter = new ShotListAdapter(new ArrayList<Shot>(), new ShotListAdapter.LoadMoreListener() {
             @Override
             public void onLoadMore() {
-                AsyncTaskCompat.executeParallel(new LoadShotTask(adapter.getDataCount() / COUNT_PER_PAGE + 1));
+//                AsyncTaskCompat.executeParallel(new LoadShotTask(adapter.getDataCount() / COUNT_PER_PAGE + 1));
+                AsyncTaskCompat.executeParallel(new LoadShotTask(false));
             }
         });
         recyclerView.setAdapter(adapter);
@@ -109,13 +122,37 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
 
         @Override
         protected List<Shot> doInBackground(Void... voids) {
-            try {
-                // use OkHttp to go get request and return response
-                return refresh ? DribbbleFunc.getShots(1) : DribbbleFunc.getShots(page);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
+            int page = refresh ? 1 : adapter.getDataCount() / COUNT_PER_PAGE + 1;
+            switch (listType) {
+                case LIST_TYPE_POPULAR:
+                    try {
+                        return DribbbleFunc.getShots(page);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                case LIST_TYPE_LIKED:
+                    try {
+                        return DribbbleFunc.getLikedShots(page);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                default:
+                    try {
+                        return DribbbleFunc.getShots(page);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
             }
+//            try {
+//                // use OkHttp to go get request and return response
+//                return refresh ? DribbbleFunc.getShots(1) : DribbbleFunc.getShots(page);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//                return null;
+//            }
         }
 
         @Override
