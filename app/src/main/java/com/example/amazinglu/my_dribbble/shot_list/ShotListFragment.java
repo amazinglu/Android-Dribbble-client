@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.os.AsyncTaskCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -34,6 +35,7 @@ import butterknife.ButterKnife;
 public class ShotListFragment extends android.support.v4.app.Fragment {
 
     @BindView(R.id.recycle_view) RecyclerView recyclerView;
+    @BindView(R.id.recycler_view_refresh_container) SwipeRefreshLayout swipeRefreshLayout;
 
     private static final int COUNT_PER_PAGE = 12;
 
@@ -50,6 +52,7 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recycler_view, container, false);
         ButterKnife.bind(this, view);
+        swipeRefreshLayout.setRefreshing(false);
         return view;
     }
 
@@ -60,9 +63,19 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
                 getResources().getDimensionPixelSize(R.dimen.spacing_medium)));
 
         /**
+         * set the listener of refresh layout
+         * */
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                AsyncTaskCompat.executeParallel(new LoadShotTask(true));
+            }
+        });
+
+
+        /**
          * load more data at a thread
          * */
-        final android.os.Handler handler = new android.os.Handler();
         adapter = new ShotListAdapter(new ArrayList<Shot>(), new ShotListAdapter.LoadMoreListener() {
             @Override
             public void onLoadMore() {
@@ -78,16 +91,21 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
     private class LoadShotTask extends AsyncTask<Void, Void, List<Shot>> {
 
         int page;
+        boolean refresh;
 
         public LoadShotTask(int page) {
             this.page = page;
+        }
+
+        public LoadShotTask(boolean refresh) {
+            this.refresh = refresh;
         }
 
         @Override
         protected List<Shot> doInBackground(Void... voids) {
             try {
                 // use OkHttp to go get request and return response
-                return DribbbleFunc.getShots(page);
+                return refresh ? DribbbleFunc.getShots(1) : DribbbleFunc.getShots(page);
             } catch (IOException e) {
                 e.printStackTrace();
                 return null;
@@ -98,7 +116,13 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
         protected void onPostExecute(List<Shot> shots) {
             if (shots != null) {
                 // pass the shots to adapter
-                adapter.append(shots);
+                if (refresh) {
+                    adapter.setData(shots);
+                    swipeRefreshLayout.setRefreshing(false);
+                    refresh = false;
+                } else {
+                    adapter.append(shots);
+                }
             } else {
                 Snackbar.make(getView(), "Error!", Snackbar.LENGTH_LONG).show();
             }
