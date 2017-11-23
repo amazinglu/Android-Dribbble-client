@@ -1,8 +1,11 @@
 package com.example.amazinglu.my_dribbble.shot_list;
 
 import android.app.Fragment;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v4.os.AsyncTaskCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -13,9 +16,11 @@ import android.widget.Toast;
 
 import com.example.amazinglu.my_dribbble.R;
 import com.example.amazinglu.my_dribbble.base.SpaceItemdecoration;
+import com.example.amazinglu.my_dribbble.login.DribbbleFunc;
 import com.example.amazinglu.my_dribbble.model.Shot;
 import com.example.amazinglu.my_dribbble.model.User;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,99 +63,45 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
          * load more data at a thread
          * */
         final android.os.Handler handler = new android.os.Handler();
-        adapter = new ShotListAdapter(fakeData(0), new ShotListAdapter.LoadMoreListener() {
+        adapter = new ShotListAdapter(new ArrayList<Shot>(), new ShotListAdapter.LoadMoreListener() {
             @Override
             public void onLoadMore() {
-//                Toast.makeText(getContext(), "load more called", Toast.LENGTH_LONG).show();
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(2000);
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    List<Shot> moreData = fakeData(adapter.getDataCount() / COUNT_PER_PAGE);
-                                    // get the data
-                                    adapter.append(moreData);
-                                    // set the show loading
-                                    adapter.setShowLoading(moreData.size() >= COUNT_PER_PAGE);
-                                }
-                            });
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();
+                AsyncTaskCompat.executeParallel(new LoadShotTask(adapter.getDataCount() / COUNT_PER_PAGE + 1));
             }
         });
         recyclerView.setAdapter(adapter);
     }
 
     /**
-     * assumes that there are only 3 pages of data
-     * and each page has 20 shot list
+     * use AsyncTask, OkHttp and JSON to get the shot back from Dribbble API
      * */
-    private List<Shot> fakeData(int page) {
-        List<Shot> shotList = new ArrayList<>();
-        Random random = new Random();
+    private class LoadShotTask extends AsyncTask<Void, Void, List<Shot>> {
 
-        int count = (page > 2) ? 10 : COUNT_PER_PAGE;
-        for (int i = 0; i < count; ++i) {
-            Shot shot = new Shot();
-            shot.title = "shot" + i;
-            shot.views_count = random.nextInt(10000);
-            shot.likes_count = random.nextInt(200);
-            shot.buckets_count = random.nextInt(50);
-            shot.description = makeDescription();
+        int page;
 
-            /**
-             * fake image url
-             * */
-            shot.images = new HashMap<>();
-            shot.images.put(Shot.IMAGE_HIDPI, imageUrls[random.nextInt(imageUrls.length)]);
-
-            shot.user = new User();
-            shot.user.name = shot.title + " author";
-
-            shotList.add(shot);
+        public LoadShotTask(int page) {
+            this.page = page;
         }
-        return shotList;
-    }
 
-    private static final String[] words = {
-            "bottle", "bowl", "brick", "building", "bunny", "cake", "car", "cat", "cup",
-            "desk", "dog", "duck", "elephant", "engineer", "fork", "glass", "griffon", "hat", "key",
-            "knife", "lawyer", "llama", "manual", "meat", "monitor", "mouse", "tangerine", "paper",
-            "pear", "pen", "pencil", "phone", "physicist", "planet", "potato", "road", "salad",
-            "shoe", "slipper", "soup", "spoon", "star", "steak", "table", "terminal", "treehouse",
-            "truck", "watermelon", "window"
-    };
+        @Override
+        protected List<Shot> doInBackground(Void... voids) {
+            try {
+                // use OkHttp to go get request and return response
+                return DribbbleFunc.getShots(page);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
 
-    private static final String[] imageUrls = {
-            "https://d13yacurqjgara.cloudfront.net/users/58851/screenshots/3400841/dribbble_pretoria-04.png",
-            "https://d13yacurqjgara.cloudfront.net/users/41719/screenshots/3400864/octowheel.jpg",
-            "https://d13yacurqjgara.cloudfront.net/users/1008875/screenshots/3399601/old-pc.jpg",
-            "https://d13yacurqjgara.cloudfront.net/users/4381/screenshots/3400780/dribbble-1.png",
-            "https://d13yacurqjgara.cloudfront.net/users/559871/screenshots/3401056/gradient_fox.jpg",
-            "https://d13yacurqjgara.cloudfront.net/users/79723/screenshots/3401386/untitled-9-01.jpg",
-            "https://d13yacurqjgara.cloudfront.net/users/698/screenshots/3401039/ss-2017-cover.png",
-            "https://d13yacurqjgara.cloudfront.net/users/45389/screenshots/3400936/portfolium-spaceman.png",
-            "https://d13yacurqjgara.cloudfront.net/users/65767/screenshots/3400922/peter_deltondo_virta_health_iphone_responsive_mobile_menu_2x.jpg",
-            "https://d13yacurqjgara.cloudfront.net/users/203446/screenshots/3400931/bitmap.png",
-            "https://d13yacurqjgara.cloudfront.net/users/235360/screenshots/3400791/how-to.png",
-            "https://d13yacurqjgara.cloudfront.net/users/58267/screenshots/3401160/people-socks-rebranding.jpg",
-            "https://d13yacurqjgara.cloudfront.net/users/363877/screenshots/3400983/gentle-bird-w.jpg",
-            "https://d13yacurqjgara.cloudfront.net/users/33298/screenshots/3400699/dribhat2.jpg",
-            "https://d13yacurqjgara.cloudfront.net/users/879147/screenshots/3401051/aaa.jpg",
-            "https://d13yacurqjgara.cloudfront.net/users/98561/screenshots/3401583/new_user_experience_style_frames_1x.png",
-            "https://d13yacurqjgara.cloudfront.net/users/371094/screenshots/3401298/richkid.jpg",
-            "https://d13yacurqjgara.cloudfront.net/users/875337/screenshots/3400965/bg-plane.jpg",
-            "https://d13yacurqjgara.cloudfront.net/users/1365782/screenshots/3399506/new_copy_18.png",
-            "https://d13yacurqjgara.cloudfront.net/users/44338/screenshots/3401460/aw1_drib.png"
-    };
-
-    private static String makeDescription() {
-        return TextUtils.join(" ", words);
+        @Override
+        protected void onPostExecute(List<Shot> shots) {
+            if (shots != null) {
+                // pass the shots to adapter
+                adapter.append(shots);
+            } else {
+                Snackbar.make(getView(), "Error!", Snackbar.LENGTH_LONG).show();
+            }
+        }
     }
 }
