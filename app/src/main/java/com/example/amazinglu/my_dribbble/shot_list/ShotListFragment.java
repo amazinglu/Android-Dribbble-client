@@ -52,7 +52,6 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recycler_view, container, false);
         ButterKnife.bind(this, view);
-        swipeRefreshLayout.setRefreshing(false);
         return view;
     }
 
@@ -65,6 +64,8 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
         /**
          * set the listener of refresh layout
          * */
+        // set the refresh to fail when first load the shot
+        swipeRefreshLayout.setRefreshing(false);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

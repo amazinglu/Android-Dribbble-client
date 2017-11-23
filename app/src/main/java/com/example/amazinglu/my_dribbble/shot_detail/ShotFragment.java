@@ -51,16 +51,4 @@ public class ShotFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(new ShotAdapter(shot));
     }
-
-//    private Shot fakeData() {
-//        Shot shot = new Shot();
-//        shot.title = "shot title";
-//        shot.description = "the description of the shot";
-//        shot.likes_count = 23;
-//        shot.buckets_count = 32;
-//        shot.views_count = 44;
-//        shot.user = new User();
-//        shot.user.name = "user name";
-//        return shot;
-//    }
 }

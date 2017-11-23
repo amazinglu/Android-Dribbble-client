@@ -109,7 +109,7 @@ use picasso to download image and place it into image view
 
 Picasso.with(holder.itemView.getContext())
                         .load(shot.getImageUrl())   // load the image from url
-                        .placeholder(R.drawable.shot_placeholder)    // if no image load, use palceholder
+                        .placeholder(R.drawable.shot_placeholder)    // if no image load, use placeholder
                         .into(((ImageViewHolder) holder).image);    // out the iamge into image view
 
 use glide to download image and place it into image view
@@ -118,7 +118,7 @@ use glide to download image and place it into image view
 use fresco to download image and place it into image view
     - need to initialize Fresco
         - can only be initialize once
-        - create a name for the applicaiton
+        - create a name for the application
         - create a class that have the same name of the application
         - initialize Frecso in the onCreate function of this class
 
@@ -126,3 +126,91 @@ use fresco to download image and place it into image view
         - change all the IamgeView to impleDraweeView
 
     - add fresco to the adapter (same as Gilde and Picasso)
+
+========================================================
+
+oauth login:
+
+1. create the layout for login and auth activity
+    => login (activity_login.xml)
+    => auth (activity_webview.xml)
+        the position of the progressive bar and webview
+
+2. in login activity
+    - get the user info and token in share memory
+        - if not token: stay in login activity
+        - else: jump to main activity (user has already login)
+
+3. if not log in, click the log in button and call AuthFunc.openAuthActivity(LoginActivity.this)
+    - generate the authorize url (get request)
+    - go to .login.auth.AuthActivity
+
+4. use webview to load url, set the preogressive bar and 检测 url change
+
+    - set the progressive bar 
+        - webView.setWebViewClient.onPageStarted()
+        - webView.setWebViewClient.onPageFinished()
+        - webView.setWebChromeClient.onProgressChanged() // update the prpgressive bar
+
+    - load url
+        - webView.loadUrl(url);
+
+    - notify url change ( webView.setWebViewClient.shouldOverrideUrlLoading(...))
+        - get the code from redirected url
+        - go back to login activity with the code
+
+    - use the code to get the token => AuthFunc.fetchAccessToken(authCode)
+    - now we have the token
+        - use the token to get user info
+        - store the token and user info into share preference (DribbbleFunc.login)
+        - go to main activity
+
+================================================
+
+load shots using get request (ShotListFragment)
+
+use AsyncTask: (LoadShotTask class)
+    - doInBackground(...) // non_UI thread, for HTTP IO
+        - generate the request url
+        - translate the JSON reponse to object (shot) DribbbleFunc.getShots(....)
+
+    - onPostExecute(...) // add data to adapter, UI thread
+        - add shots to adapter and update the view => adapter.append(shots)
+
+============================================
+
+share shots to other activities (ShotAdapter.share(...))
+
+==========================================
+
+下拉 refresh
+
+1. use SwipeRefreshLayout to wrap recycler view
+
+2. set the reflesh listener
+    - swipeRefreshLayout.setOnRefreshListener.onRefresh()
+    - we need to 
+        - delete all the existing data
+        - load the new data using get request
+        - place the new data onto adapter and update the view
+    - add a "refresh mode" on LoadShotTask class
+
+3. remember to disable the refresh when the view first create
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
