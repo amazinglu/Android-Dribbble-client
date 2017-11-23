@@ -61,11 +61,13 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
         recyclerView.addItemDecoration(new SpaceItemdecoration(
                 getResources().getDimensionPixelSize(R.dimen.spacing_medium)));
 
+        // disable the refresh when first load the fragment
+        swipeRefreshLayout.setEnabled(false);
+
         /**
          * set the listener of refresh layout
          * */
         // set the refresh to fail when first load the shot
-        swipeRefreshLayout.setRefreshing(false);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -84,6 +86,9 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
             }
         });
         recyclerView.setAdapter(adapter);
+
+        // enable the refresh after the first loading of the fragment
+        swipeRefreshLayout.setEnabled(true);
     }
 
     /**
