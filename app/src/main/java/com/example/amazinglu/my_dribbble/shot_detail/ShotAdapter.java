@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
 import com.example.amazinglu.my_dribbble.R;
 import com.example.amazinglu.my_dribbble.model.Shot;
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -68,6 +69,11 @@ public class ShotAdapter extends RecyclerView.Adapter {
                 shotDetailViewHolder.likeCount.setText(String.valueOf(shot.likes_count));
                 shotDetailViewHolder.bucketCount.setText(String.valueOf(shot.buckets_count));
                 shotDetailViewHolder.viewCount.setText(String.valueOf(shot.views_count));
+
+                // load the author picture
+                Glide.with(holder.itemView.getContext())
+                        .load(shot.user.avatar_url)
+                        .into(shotDetailViewHolder.authorPicture);
 
                 shotDetailViewHolder.shareButton.setOnClickListener(new View.OnClickListener() {
                     @Override

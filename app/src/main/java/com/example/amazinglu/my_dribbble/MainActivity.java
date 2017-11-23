@@ -15,8 +15,10 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.amazinglu.my_dribbble.bucket_list.BucketListFragment;
 import com.example.amazinglu.my_dribbble.login.DribbbleFunc;
 import com.example.amazinglu.my_dribbble.shot_list.ShotListFragment;
@@ -109,6 +111,13 @@ public class MainActivity extends AppCompatActivity {
         View headerView = navigationView.getHeaderView(0);
         ((TextView) headerView.findViewById(R.id.nav_header_user_name)).setText(
                 DribbbleFunc.getCurrentUser().name);
+
+        // load the user picture
+        ImageView userPicture = (ImageView) headerView.findViewById(R.id.nav_header_user_picture);
+        Glide.with(this)
+                .load(DribbbleFunc.getCurrentUser().avatar_url)
+                .into(userPicture);
+
         headerView.findViewById(R.id.nav_header_logout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
