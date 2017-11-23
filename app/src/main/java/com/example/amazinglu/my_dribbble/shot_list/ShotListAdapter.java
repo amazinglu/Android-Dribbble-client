@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bumptech.glide.Glide;
 import com.example.amazinglu.my_dribbble.R;
 import com.example.amazinglu.my_dribbble.model.Shot;
 import com.example.amazinglu.my_dribbble.shot_detail.ShotActivity;
@@ -64,10 +63,11 @@ public class ShotListAdapter extends RecyclerView.Adapter {
             shotViewHolder.viewCount.setText(String.valueOf(shot.views_count));
             shotViewHolder.image.setImageResource(R.drawable.shot_placeholder);
 
+            // play gif automatically
             DraweeController controller = Fresco.newDraweeControllerBuilder()
-                    .setUri(Uri.parse(shot.getImageUrl()))
-                    .setAutoPlayAnimations(true)
-                    .build();
+                                                .setUri(Uri.parse(shot.getImageUrl()))
+                                                .setAutoPlayAnimations(true)
+                                                .build();
             shotViewHolder.image.setController(controller);
 
             // listener for clicking the shot list

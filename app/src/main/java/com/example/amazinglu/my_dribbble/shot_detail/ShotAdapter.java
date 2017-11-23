@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bumptech.glide.Glide;
 import com.example.amazinglu.my_dribbble.R;
 import com.example.amazinglu.my_dribbble.model.Shot;
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -48,6 +47,9 @@ public class ShotAdapter extends RecyclerView.Adapter {
             case VIEW_TYPE_SHOT_IMAGE:
                 /**
                  * download the image and put it into the image view using Fresco
+                 * show animation
+                 * 1. need to include "compile 'com.facebook.fresco:animated-gif:0.13.0'"
+                 * 2. check if the download image has the key "hidpi"
                  * */
                 DraweeController controller = Fresco.newDraweeControllerBuilder()
                         .setUri(Uri.parse(shot.getImageUrl()))

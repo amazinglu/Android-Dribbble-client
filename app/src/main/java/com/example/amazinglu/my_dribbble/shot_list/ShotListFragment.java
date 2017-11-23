@@ -35,7 +35,7 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
 
     @BindView(R.id.recycle_view) RecyclerView recyclerView;
 
-    private static final int COUNT_PER_PAGE = 20;
+    private static final int COUNT_PER_PAGE = 12;
 
     private ShotListAdapter adapter;
 

@@ -84,6 +84,11 @@ public class DribbbleFunc {
 
     private static <T> T parseResponse(Response response, TypeToken<T> typeToken) throws IOException {
         String responseString = response.body().string();
+        /**
+         * responseString is a JSON base string
+         * when we set the typeToken to Shot class
+         * JSON will automatically 根据变量名 set value
+         * */
         return ModelUtils.toObject(responseString, typeToken);
     }
 
