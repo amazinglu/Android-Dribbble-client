@@ -126,14 +126,16 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
             switch (listType) {
                 case LIST_TYPE_POPULAR:
                     try {
-                        return DribbbleFunc.getShots(page);
+                        List<Shot> res = DribbbleFunc.getShots(page);
+                        return res;
                     } catch (IOException e) {
                         e.printStackTrace();
                         return null;
                     }
                 case LIST_TYPE_LIKED:
                     try {
-                        return DribbbleFunc.getLikedShots(page);
+                        List<Shot> res = DribbbleFunc.getLikedShots(page);
+                        return res;
                     } catch (IOException e) {
                         e.printStackTrace();
                         return null;
@@ -164,6 +166,7 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
                     swipeRefreshLayout.setRefreshing(false);
                     refresh = false;
                 } else {
+                    adapter.setShowLoading(shots.size() == COUNT_PER_PAGE);
                     adapter.append(shots);
                 }
             } else {
