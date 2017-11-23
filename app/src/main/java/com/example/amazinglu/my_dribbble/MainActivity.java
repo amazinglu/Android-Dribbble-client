@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.example.amazinglu.my_dribbble.bucket_list.BucketListFragment;
 import com.example.amazinglu.my_dribbble.login.DribbbleFunc;
 import com.example.amazinglu.my_dribbble.shot_list.ShotListFragment;
+import com.example.amazinglu.my_dribbble.utils.ImageUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -114,9 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
         // load the user picture
         ImageView userPicture = (ImageView) headerView.findViewById(R.id.nav_header_user_picture);
-        Glide.with(this)
-                .load(DribbbleFunc.getCurrentUser().avatar_url)
-                .into(userPicture);
+        ImageUtils.loadUserPicture(this, userPicture, DribbbleFunc.getCurrentUser().avatar_url);
 
         headerView.findViewById(R.id.nav_header_logout).setOnClickListener(new View.OnClickListener() {
             @Override

@@ -14,6 +14,7 @@ import com.example.amazinglu.my_dribbble.R;
 import com.example.amazinglu.my_dribbble.model.Shot;
 import com.example.amazinglu.my_dribbble.shot_detail.ShotActivity;
 import com.example.amazinglu.my_dribbble.shot_detail.ShotFragment;
+import com.example.amazinglu.my_dribbble.utils.ImageUtils;
 import com.example.amazinglu.my_dribbble.utils.ModelUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
@@ -61,14 +62,8 @@ public class ShotListAdapter extends RecyclerView.Adapter {
             shotViewHolder.likeCount.setText(String.valueOf(shot.likes_count));
             shotViewHolder.bucketCount.setText(String.valueOf(shot.buckets_count));
             shotViewHolder.viewCount.setText(String.valueOf(shot.views_count));
-            shotViewHolder.image.setImageResource(R.drawable.shot_placeholder);
-
-            // play gif automatically
-            DraweeController controller = Fresco.newDraweeControllerBuilder()
-                                                .setUri(Uri.parse(shot.getImageUrl()))
-                                                .setAutoPlayAnimations(true)
-                                                .build();
-            shotViewHolder.image.setController(controller);
+            // load shot image
+            ImageUtils.loadShotImage(shot, shotViewHolder.image);
 
             // listener for clicking the shot list
             shotViewHolder.cover.setOnClickListener(new View.OnClickListener() {
@@ -76,7 +71,9 @@ public class ShotListAdapter extends RecyclerView.Adapter {
                 public void onClick(View view) {
                     Context context = holder.itemView.getContext();
                     Intent intent = new Intent(context, ShotActivity.class);
-                    // use JSON to transit object through activities
+                    /**
+                     * use JSON to transit object through activities
+                     * */
                     intent.putExtra(ShotFragment.KEY_SHOT,
                             ModelUtils.toString(shot, new TypeToken<Shot>(){}));
                     intent.putExtra(ShotActivity.KEY_SHOT_TITLE, shot.title);

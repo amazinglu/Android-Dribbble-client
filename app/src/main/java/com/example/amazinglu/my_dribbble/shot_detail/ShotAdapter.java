@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.example.amazinglu.my_dribbble.R;
 import com.example.amazinglu.my_dribbble.model.Shot;
+import com.example.amazinglu.my_dribbble.utils.ImageUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
 
@@ -54,26 +57,25 @@ public class ShotAdapter extends RecyclerView.Adapter {
                  * 1. need to include "compile 'com.facebook.fresco:animated-gif:0.13.0'"
                  * 2. check if the download image has the key "hidpi"
                  * */
-                DraweeController controller = Fresco.newDraweeControllerBuilder()
-                        .setUri(Uri.parse(shot.getImageUrl()))
-                        .setAutoPlayAnimations(true)
-                        .build();
-                ((ImageViewHolder) holder).image.setController(controller);
+                ImageUtils.loadShotImage(shot, ((ImageViewHolder) holder).image);
                 break;
             case VIEW_TYPE_SHOT_INFO:
                 InfoViewHolder shotDetailViewHolder = (InfoViewHolder)holder;
                 shotDetailViewHolder.title.setText(shot.title);
                 shotDetailViewHolder.authorName.setText(shot.user.name);
-                shotDetailViewHolder.description.setText(shot.description);
+//                shotDetailViewHolder.description.setText(shot.description);
+
+                shotDetailViewHolder.description.setText(Html.fromHtml(
+                        shot.description == null ? "" : shot.description));
+                shotDetailViewHolder.description.setMovementMethod(LinkMovementMethod.getInstance());
 
                 shotDetailViewHolder.likeCount.setText(String.valueOf(shot.likes_count));
                 shotDetailViewHolder.bucketCount.setText(String.valueOf(shot.buckets_count));
                 shotDetailViewHolder.viewCount.setText(String.valueOf(shot.views_count));
 
-                // load the author picture
-                Glide.with(holder.itemView.getContext())
-                        .load(shot.user.avatar_url)
-                        .into(shotDetailViewHolder.authorPicture);
+                ImageUtils.loadUserPicture(holder.itemView.getContext(),
+                        shotDetailViewHolder.authorPicture,
+                        shot.user.avatar_url);
 
                 shotDetailViewHolder.shareButton.setOnClickListener(new View.OnClickListener() {
                     @Override
