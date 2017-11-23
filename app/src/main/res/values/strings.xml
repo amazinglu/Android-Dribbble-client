@@ -20,4 +20,7 @@
     <string name="shot_author_picture">Shot author picture</string>
 
     <string name="auth_login_title">Log into Dribbble</string>
+
+    <string name="user_profile_picture">User profile picture</string>
+    <string name="logout">Log out</string>
 </resources>

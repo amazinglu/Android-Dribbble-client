@@ -56,8 +56,19 @@ public class DribbbleFunc {
         storeUser(context, user);
     }
 
+    public static void logout(@NonNull Context context) {
+        storeAccessToken(context, null);
+        storeUser(context, null);
+        accessToken = null;
+        user = null;
+    }
+
     public static User getUser() throws IOException {
         return parseResponse(makeGetRequest(USER_END_POINT), USER_TYPE);
+    }
+
+    public static User getCurrentUser() {
+        return user;
     }
 
     private static Response makeGetRequest(String url) throws IOException {
@@ -86,6 +97,12 @@ public class DribbbleFunc {
                 Context.MODE_PRIVATE);
         // use apply 让硬盘储存异步进行
         sp.edit().putString(KEY_ACCESS_TOKEN, token).apply();
+    }
+
+    public static void removeAccessToken(@NonNull Context context) {
+        SharedPreferences sp = context.getApplicationContext().getSharedPreferences(SP_AUTH,
+                Context.MODE_PRIVATE);
+        sp.edit().remove(KEY_ACCESS_TOKEN).apply();
     }
 
     // load the user information from share preferences

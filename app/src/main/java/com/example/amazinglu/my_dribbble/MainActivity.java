@@ -1,7 +1,9 @@
 package com.example.amazinglu.my_dribbble;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.TestLooperManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -12,8 +14,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.amazinglu.my_dribbble.bucket_list.BucketListFragment;
+import com.example.amazinglu.my_dribbble.login.DribbbleFunc;
 import com.example.amazinglu.my_dribbble.shot_list.ShotListFragment;
 
 import butterknife.BindView;
@@ -97,6 +102,22 @@ public class MainActivity extends AppCompatActivity {
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
                 R.string.open_drawer, R.string.close_drawer);
         drawerLayout.setDrawerListener(drawerToggle);
+
+        /**
+         * set up the header
+         * */
+        View headerView = navigationView.getHeaderView(0);
+        ((TextView) headerView.findViewById(R.id.nav_header_user_name)).setText(
+                DribbbleFunc.getCurrentUser().name);
+        headerView.findViewById(R.id.nav_header_logout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DribbbleFunc.logout(MainActivity.this);
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         /**
          * the listener of the items in navigation view
