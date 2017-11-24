@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.amazinglu.my_dribbble.R;
+import com.example.amazinglu.my_dribbble.base.DribbbleException;
+import com.example.amazinglu.my_dribbble.base.DribbbleTask;
 import com.example.amazinglu.my_dribbble.base.SpaceItemdecoration;
 import com.example.amazinglu.my_dribbble.login.DribbbleFunc;
 import com.example.amazinglu.my_dribbble.model.Shot;
@@ -99,79 +101,51 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
             }
         });
         recyclerView.setAdapter(adapter);
-
-        // enable the refresh after the first loading of the fragment
-        swipeRefreshLayout.setEnabled(true);
     }
 
     /**
      * use AsyncTask, OkHttp and JSON to get the shot back from Dribbble API
      * */
-    private class LoadShotTask extends AsyncTask<Void, Void, List<Shot>> {
 
-        int page;
-        boolean refresh;
+    private class LoadShotTask extends DribbbleTask<Void, Void, List<Shot>> {
 
-        public LoadShotTask(int page) {
-            this.page = page;
-        }
+        private boolean refresh;
+        private int page;
 
         public LoadShotTask(boolean refresh) {
             this.refresh = refresh;
         }
 
         @Override
-        protected List<Shot> doInBackground(Void... voids) {
-            int page = refresh ? 1 : adapter.getDataCount() / COUNT_PER_PAGE + 1;
+        protected List<Shot> doJob(Void... params) throws DribbbleException, IOException {
+            page = refresh ? 1 : adapter.getDataCount() / COUNT_PER_PAGE + 1;
             switch (listType) {
                 case LIST_TYPE_POPULAR:
-                    try {
-                        List<Shot> res = DribbbleFunc.getShots(page);
-                        return res;
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        return null;
-                    }
+                    return DribbbleFunc.getShots(page);
                 case LIST_TYPE_LIKED:
-                    try {
-                        List<Shot> res = DribbbleFunc.getLikedShots(page);
-                        return res;
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        return null;
-                    }
+                    return DribbbleFunc.getLikedShots(page);
                 default:
-                    try {
-                        return DribbbleFunc.getShots(page);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        return null;
-                    }
+                    return DribbbleFunc.getShots(page);
             }
-//            try {
-//                // use OkHttp to go get request and return response
-//                return refresh ? DribbbleFunc.getShots(1) : DribbbleFunc.getShots(page);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//                return null;
-//            }
         }
 
         @Override
-        protected void onPostExecute(List<Shot> shots) {
-            if (shots != null) {
-                // pass the shots to adapter
-                if (refresh) {
-                    adapter.setData(shots);
-                    swipeRefreshLayout.setRefreshing(false);
-                    refresh = false;
-                } else {
-                    adapter.setShowLoading(shots.size() == COUNT_PER_PAGE);
-                    adapter.append(shots);
-                }
+        protected void onSuccess(List<Shot> shots) {
+            if (refresh) {
+                adapter.setData(shots);
+                swipeRefreshLayout.setRefreshing(false);
+                refresh = false;
             } else {
-                Snackbar.make(getView(), "Error!", Snackbar.LENGTH_LONG).show();
+                swipeRefreshLayout.setEnabled(true);
+                // set the show loading
+                adapter.setShowLoading(shots.size() == COUNT_PER_PAGE);
+                adapter.append(shots);
             }
+        }
+
+        @Override
+        protected void onFailed(DribbbleException e) {
+            Snackbar.make(getView(), e.getMessage(), Snackbar.LENGTH_LONG).show();
         }
     }
 }
