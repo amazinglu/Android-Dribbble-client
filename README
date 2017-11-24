@@ -197,6 +197,18 @@ share shots to other activities (ShotAdapter.share(...))
 
 3. remember to disable the refresh when the view first create
 
+============================================
+
+recycler view for like fragment
+
+
+
+============================================
+
+like or dislike a shot
+
+
+
 
 
 

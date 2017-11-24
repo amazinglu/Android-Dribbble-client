@@ -32,7 +32,26 @@ public class LoginActivity extends AppCompatActivity {
          * true => get the user information and go to main activity
          * false => go to oauth login
          * */
-        DribbbleFunc.init(this);
+        try {
+            DribbbleFunc.init(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        /**
+         * if we already have the token
+         * check if the user info is up to date
+         * */
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    DribbbleFunc.checkUserInfo(LoginActivity.this);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
 
         if (DribbbleFunc.isLogin()) { // go to main activity
             Intent intent = new Intent(this, MainActivity.class);

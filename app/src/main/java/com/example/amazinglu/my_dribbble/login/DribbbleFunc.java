@@ -48,10 +48,21 @@ public class DribbbleFunc {
     private static User user;
     private static OkHttpClient client = new OkHttpClient();
 
-    public static void init(@NonNull Context context) {
+    public static void init(@NonNull Context context) throws IOException {
         accessToken = loadAcesstoken(context);
         if (accessToken != null) {
             user = loadUser(context);
+        }
+    }
+
+    public static void checkUserInfo(@NonNull Context context) throws IOException {
+        if (accessToken != null) {
+            // check if the user info has change first
+            user = getUser();
+            User oldUser = loadUser(context);
+            if (oldUser.name != user.name || oldUser.avatar_url != user.avatar_url) {
+                storeUser(context, user);
+            }
         }
     }
 
