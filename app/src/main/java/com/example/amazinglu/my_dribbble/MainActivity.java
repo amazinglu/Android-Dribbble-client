@@ -118,6 +118,9 @@ public class MainActivity extends AppCompatActivity {
         ImageView userPicture = (ImageView) headerView.findViewById(R.id.nav_header_user_picture);
         ImageUtils.loadUserPicture(this, userPicture, DribbbleFunc.getCurrentUser().avatar_url);
 
+        /**
+         * click on logout button
+         * */
         headerView.findViewById(R.id.nav_header_logout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

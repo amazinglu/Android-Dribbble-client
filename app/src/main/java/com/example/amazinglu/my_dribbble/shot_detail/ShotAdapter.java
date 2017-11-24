@@ -2,8 +2,10 @@ package com.example.amazinglu.my_dribbble.shot_detail;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -66,7 +68,6 @@ public class ShotAdapter extends RecyclerView.Adapter {
                 InfoViewHolder shotDetailViewHolder = (InfoViewHolder)holder;
                 shotDetailViewHolder.title.setText(shot.title);
                 shotDetailViewHolder.authorName.setText(shot.user.name);
-//                shotDetailViewHolder.description.setText(shot.description);
 
                 shotDetailViewHolder.description.setText(Html.fromHtml(
                         shot.description == null ? "" : shot.description));
@@ -98,6 +99,16 @@ public class ShotAdapter extends RecyclerView.Adapter {
                         shotFragment.like(shot.id, !shot.liked);
                     }
                 });
+
+                /**
+                 * set the view of the like button
+                 * 1. user likes this shot => pink
+                 * 1. user not likes this shot => black
+                 * */
+                Drawable likeDrawable = shot.liked
+                        ? ContextCompat.getDrawable(shotFragment.getContext(), R.drawable.ic_favorite_dribbble_18dp)
+                        : ContextCompat.getDrawable(shotFragment.getContext(), R.drawable.ic_favorite_black_18dp);
+                shotDetailViewHolder.likeButton.setImageDrawable(likeDrawable);
 
                 break;
         }
