@@ -13,6 +13,7 @@ import com.example.amazinglu.my_dribbble.utils.ModelUtils;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -203,6 +204,19 @@ public class DribbbleFunc {
     public static void unlikeShot(@NonNull String id) {
         String url = SHOTS_END_POINT + "/" + id + "/like";
         Response response = makeDeleteRequest(url);
+    }
+
+    public static boolean isLikingShot(@NonNull String id) throws DribbbleException {
+        String url = SHOTS_END_POINT + "/" + id + "/like";
+        Response response = makeGetRequest(url);
+        switch (response.code()) {
+            case HttpURLConnection.HTTP_OK:
+                return true;
+            case HttpURLConnection.HTTP_NOT_FOUND:
+                return false;
+            default:
+                throw new DribbbleException(response.message());
+        }
     }
 
 }

@@ -67,6 +67,12 @@ public class ShotFragment extends Fragment {
                             new TypeToken<Shot>(){});
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(new ShotAdapter(shot, this));
+
+        /**
+         * check the like status of a shot
+         * */
+        isLiking = true;
+        AsyncTaskCompat.executeParallel(new CheckLikeTask());
     }
 
     /**
@@ -88,6 +94,9 @@ public class ShotFragment extends Fragment {
         }
     }
 
+    /**
+     * update the info of like and unlike via HTTP request
+     * */
     private class LikeTask extends DribbbleTask<Void, Void, Void> {
 
         private String id;
@@ -116,6 +125,29 @@ public class ShotFragment extends Fragment {
             recyclerView.getAdapter().notifyDataSetChanged();
 
             setResult();
+        }
+
+        @Override
+        protected void onFailed(DribbbleException e) {
+            isLiking = false;
+            Snackbar.make(getView(), e.getMessage(), Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    /**
+     * get the like status of a shot via HTTP get request
+     * */
+    private class CheckLikeTask extends DribbbleTask<Void, Void, Boolean> {
+        @Override
+        protected Boolean doJob(Void... params) throws DribbbleException, IOException {
+            return DribbbleFunc.isLikingShot(shot.id);
+        }
+
+        @Override
+        protected void onSuccess(Boolean res) {
+            isLiking = false;
+            shot.liked = res;
+            recyclerView.getAdapter().notifyDataSetChanged();
         }
 
         @Override
