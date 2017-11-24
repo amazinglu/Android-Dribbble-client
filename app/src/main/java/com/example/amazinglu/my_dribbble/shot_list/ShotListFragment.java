@@ -1,6 +1,8 @@
 package com.example.amazinglu.my_dribbble.shot_list;
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,6 +24,9 @@ import com.example.amazinglu.my_dribbble.base.SpaceItemdecoration;
 import com.example.amazinglu.my_dribbble.login.DribbbleFunc;
 import com.example.amazinglu.my_dribbble.model.Shot;
 import com.example.amazinglu.my_dribbble.model.User;
+import com.example.amazinglu.my_dribbble.shot_detail.ShotFragment;
+import com.example.amazinglu.my_dribbble.utils.ModelUtils;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,6 +41,7 @@ import butterknife.ButterKnife;
 
 public class ShotListFragment extends android.support.v4.app.Fragment {
 
+    public static final int REQ_CODE_SHOT = 100;
     public static final String KEY_LIST_TYPE = "listType";
 
     public static final int LIST_TYPE_POPULAR = 1;
@@ -93,7 +99,8 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
         /**
          * load more data at a thread
          * */
-        adapter = new ShotListAdapter(new ArrayList<Shot>(), new ShotListAdapter.LoadMoreListener() {
+        adapter = new ShotListAdapter(new ArrayList<Shot>(), this,
+                new ShotListAdapter.LoadMoreListener() {
             @Override
             public void onLoadMore() {
 //                AsyncTaskCompat.executeParallel(new LoadShotTask(adapter.getDataCount() / COUNT_PER_PAGE + 1));
@@ -101,6 +108,22 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
             }
         });
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQ_CODE_SHOT && resultCode == Activity.RESULT_OK) {
+            Shot updatedShot = ModelUtils.toObject(data.getStringExtra(ShotFragment.KEY_SHOT),
+                    new TypeToken<Shot>(){});
+            for (Shot shot : adapter.getData()) {
+                if (TextUtils.equals(shot.id, updatedShot.id)) {
+                    shot.likes_count = updatedShot.likes_count;
+                    shot.buckets_count = updatedShot.buckets_count;
+                    adapter.notifyDataSetChanged();
+                    return;
+                }
+            }
+        }
     }
 
     /**

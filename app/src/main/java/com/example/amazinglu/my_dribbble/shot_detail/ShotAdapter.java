@@ -3,6 +3,7 @@ package com.example.amazinglu.my_dribbble.shot_detail;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -24,9 +25,11 @@ public class ShotAdapter extends RecyclerView.Adapter {
     private static final int VIEW_TYPE_SHOT_INFO = 1;
 
     private final Shot shot;
+    private final ShotFragment shotFragment;
 
-    public ShotAdapter(Shot shot) {
+    public ShotAdapter(@NonNull Shot shot, @NonNull ShotFragment shotFragment) {
         this.shot = shot;
+        this.shotFragment = shotFragment;
     }
 
     @Override
@@ -76,13 +79,26 @@ public class ShotAdapter extends RecyclerView.Adapter {
                 ImageUtils.loadUserPicture(holder.itemView.getContext(),
                         shotDetailViewHolder.authorPicture,
                         shot.user.avatar_url);
-
+                /**
+                 * click the share button
+                 * */
                 shotDetailViewHolder.shareButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         share(view.getContext());
                     }
                 });
+
+                /**
+                 * click the like button
+                 * */
+                shotDetailViewHolder.likeButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        shotFragment.like(shot.id, !shot.liked);
+                    }
+                });
+
                 break;
         }
     }

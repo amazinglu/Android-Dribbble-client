@@ -16,8 +16,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static com.example.amazinglu.my_dribbble.utils.ModelUtils.save;
@@ -39,6 +41,7 @@ public class DribbbleFunc {
     private static final TypeToken<User> USER_TYPE = new TypeToken<User>(){};
     private static final TypeToken<List<Shot>> SHOT_LIST_TYPE = new TypeToken<List<Shot>>(){};
     private static final TypeToken<List<Like>> LIKE_LIST_TYPE = new TypeToken<List<Like>>(){};
+    private static final TypeToken<Like> LIKE_TYPE = new TypeToken<Like>(){};
 
     private static String accessToken;
     private static User user;
@@ -78,16 +81,48 @@ public class DribbbleFunc {
     /**
      * add the token together with the url
      * */
-    private static Response makeGetRequest(String url) throws IOException {
-        Request.Builder builder = new Request.Builder()
+    private static Request.Builder authRequestBuilder(String url) {
+        return new Request.Builder()
                 .addHeader("Authorization", "Bearer " + accessToken)
                 .url(url);
-        Request request = builder.build();
-        return client.newCall(request).execute();
     }
 
-    private static <T> T parseResponse(Response response, TypeToken<T> typeToken) throws IOException {
-        String responseString = response.body().string();
+    private static Response makeRequest(Request request) {
+        Response response = null;
+        try {
+            response = client.newCall(request).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return response;
+    }
+
+    private static Response makeGetRequest(String url) {
+        Request request = authRequestBuilder(url).build();
+        return makeRequest(request);
+    }
+
+    private static Response makePostRequest(String url, RequestBody requestBody) {
+        Request request = authRequestBuilder(url)
+                .post(requestBody)
+                .build();
+        return makeRequest(request);
+    }
+
+    private static Response makeDeleteRequest(String url) {
+        Request request = authRequestBuilder(url)
+                .delete()
+                .build();
+        return makeRequest(request);
+    }
+
+    private static <T> T parseResponse(Response response, TypeToken<T> typeToken) {
+        String responseString = null;
+        try {
+            responseString = response.body().string();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         /**
          * responseString is a JSON base string
          * when we set the typeToken to Shot class
@@ -157,6 +192,17 @@ public class DribbbleFunc {
             likedShots.add(like.shot);
         }
         return likedShots;
+    }
+
+    public static Like likeShot(@NonNull String id) throws IOException {
+        String url = SHOTS_END_POINT + "/" + id + "/like";
+        Response response = makePostRequest(url, new FormBody.Builder().build());
+        return parseResponse(response, LIKE_TYPE);
+    }
+
+    public static void unlikeShot(@NonNull String id) {
+        String url = SHOTS_END_POINT + "/" + id + "/like";
+        Response response = makeDeleteRequest(url);
     }
 
 }

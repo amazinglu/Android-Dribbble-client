@@ -22,6 +22,8 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.List;
 
+import static java.security.AccessController.getContext;
+
 public class ShotListAdapter extends RecyclerView.Adapter {
 
     private static final int VIEW_TYPE_SHOT = 1;
@@ -31,10 +33,15 @@ public class ShotListAdapter extends RecyclerView.Adapter {
     private boolean showLoading;
     private LoadMoreListener loadMoreListener;
 
-    public ShotListAdapter(@NonNull List<Shot> data, @NonNull LoadMoreListener loadMoreListener) {
+    private final ShotListFragment shotListFragment;
+
+    public ShotListAdapter(@NonNull List<Shot> data,
+                           @NonNull ShotListFragment shotListFragment,
+                           @NonNull LoadMoreListener loadMoreListener) {
         this.data = data;
         this.showLoading = true;
         this.loadMoreListener = loadMoreListener;
+        this.shotListFragment = shotListFragment;
     }
 
     @Override
@@ -69,15 +76,15 @@ public class ShotListAdapter extends RecyclerView.Adapter {
             shotViewHolder.cover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Context context = holder.itemView.getContext();
-                    Intent intent = new Intent(context, ShotActivity.class);
+//                    Context context = holder.itemView.getContext();
+                    Intent intent = new Intent(shotListFragment.getContext(), ShotActivity.class);
                     /**
                      * use JSON to transit object through activities
                      * */
                     intent.putExtra(ShotFragment.KEY_SHOT,
                             ModelUtils.toString(shot, new TypeToken<Shot>(){}));
                     intent.putExtra(ShotActivity.KEY_SHOT_TITLE, shot.title);
-                    context.startActivity(intent);
+                    shotListFragment.startActivityForResult(intent, ShotListFragment.REQ_CODE_SHOT);
                 }
             });
         }
@@ -100,6 +107,10 @@ public class ShotListAdapter extends RecyclerView.Adapter {
         this.data.clear();
         this.data = data;
         notifyDataSetChanged();
+    }
+
+    public List<Shot> getData() {
+        return data;
     }
 
 
