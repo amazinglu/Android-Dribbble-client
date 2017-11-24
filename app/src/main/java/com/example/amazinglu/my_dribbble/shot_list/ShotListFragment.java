@@ -81,8 +81,13 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
 
         // disable the refresh when first load the fragment
         swipeRefreshLayout.setEnabled(false);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.addItemDecoration(new SpaceItemdecoration(
+                getResources().getDimensionPixelSize(R.dimen.spacing_medium)));
+
         /**
-         * set the listener of refresh layout
+         * refresh the data
          * */
         // set the refresh to fail when first load the shot
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -92,18 +97,13 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
             }
         });
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.addItemDecoration(new SpaceItemdecoration(
-                getResources().getDimensionPixelSize(R.dimen.spacing_medium)));
-
         /**
-         * load more data at a thread
+         * load more data
          * */
         adapter = new ShotListAdapter(new ArrayList<Shot>(), this,
                 new ShotListAdapter.LoadMoreListener() {
             @Override
             public void onLoadMore() {
-//                AsyncTaskCompat.executeParallel(new LoadShotTask(adapter.getDataCount() / COUNT_PER_PAGE + 1));
                 AsyncTaskCompat.executeParallel(new LoadShotTask(false));
             }
         });

@@ -201,13 +201,34 @@ share shots to other activities (ShotAdapter.share(...))
 
 recycler view for like fragment
 
+* the layout of "like" and "home" is the same style
+* adapter is the same
+* the data download from Dribbble API is different
 
+1. in main activity when we click the button in the menus of drawer
+    - go to the fragment will the type of fragment ("home" or like)
+
+2. in ShotListFragment, download the data of the given type ("home" => getShots(...), "like" => getLikedShot(...))
+
+3. remember to set the showLoading
 
 ============================================
 
 like or dislike a shot
 
+* according to the API of Dribbble:
+    - like a shot => post request (likeShot(...))
+    - unlike a shot => delete request (unlikedShot(...))
+    - need to check if a shot is "like" by the user (isLikingShot(...))
 
+1. before we click the like button, check if the user "like" the shot
+    - AsyncTaskCompat.executeParallel(new CheckLikeTask()) in ShotFragment
+    - set the like attribute of shot
+
+2. set the view of like button
+
+3. set the listener of the like button
+    - use API to update the like status of the shot (LikeTask)
 
 
 
