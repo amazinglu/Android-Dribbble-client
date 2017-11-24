@@ -1,4 +1,4 @@
-package com.example.amazinglu.my_dribbble.login.auth;
+package com.example.amazinglu.my_dribbble.auth_request.auth_login;
 
 import android.content.Intent;
 import android.graphics.Bitmap;

@@ -1,4 +1,4 @@
-package com.example.amazinglu.my_dribbble.login;
+package com.example.amazinglu.my_dribbble.auth_request;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -22,8 +22,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-
-import static com.example.amazinglu.my_dribbble.utils.ModelUtils.save;
 
 /**
  * Created by AmazingLu on 11/22/17.

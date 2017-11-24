@@ -5,12 +5,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.amazinglu.my_dribbble.login.DribbbleFunc;
-import com.example.amazinglu.my_dribbble.login.auth.AuthActivity;
-import com.example.amazinglu.my_dribbble.login.auth.AuthFunc;
+import com.example.amazinglu.my_dribbble.auth_request.DribbbleFunc;
+import com.example.amazinglu.my_dribbble.auth_request.auth_login.AuthActivity;
+import com.example.amazinglu.my_dribbble.auth_request.auth_login.AuthFunc;
 
 import java.io.IOException;
 

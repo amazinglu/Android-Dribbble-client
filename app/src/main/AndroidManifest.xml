@@ -24,7 +24,7 @@
         <activity android:name=".MainActivity"/>
 
         <activity
-            android:name=".login.auth.AuthActivity"
+            android:name=".auth_request.auth_login.AuthActivity"
             android:windowSoftInputMode="adjustPan"/>
 
         <activity android:name=".shot_detail.ShotActivity"/>

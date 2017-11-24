@@ -1,10 +1,9 @@
-package com.example.amazinglu.my_dribbble.login.auth;
+package com.example.amazinglu.my_dribbble.auth_request.auth_login;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;

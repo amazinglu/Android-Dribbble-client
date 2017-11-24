@@ -1,9 +1,7 @@
 package com.example.amazinglu.my_dribbble.shot_list;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -15,26 +13,20 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.amazinglu.my_dribbble.R;
 import com.example.amazinglu.my_dribbble.base.DribbbleException;
 import com.example.amazinglu.my_dribbble.base.DribbbleTask;
 import com.example.amazinglu.my_dribbble.base.SpaceItemdecoration;
-import com.example.amazinglu.my_dribbble.login.DribbbleFunc;
+import com.example.amazinglu.my_dribbble.auth_request.DribbbleFunc;
 import com.example.amazinglu.my_dribbble.model.Shot;
-import com.example.amazinglu.my_dribbble.model.User;
 import com.example.amazinglu.my_dribbble.shot_detail.ShotFragment;
 import com.example.amazinglu.my_dribbble.utils.ModelUtils;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

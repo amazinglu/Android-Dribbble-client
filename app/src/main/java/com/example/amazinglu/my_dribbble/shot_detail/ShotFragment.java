@@ -18,9 +18,8 @@ import android.view.ViewGroup;
 import com.example.amazinglu.my_dribbble.R;
 import com.example.amazinglu.my_dribbble.base.DribbbleException;
 import com.example.amazinglu.my_dribbble.base.DribbbleTask;
-import com.example.amazinglu.my_dribbble.login.DribbbleFunc;
+import com.example.amazinglu.my_dribbble.auth_request.DribbbleFunc;
 import com.example.amazinglu.my_dribbble.model.Shot;
-import com.example.amazinglu.my_dribbble.model.User;
 import com.example.amazinglu.my_dribbble.utils.ModelUtils;
 import com.google.gson.reflect.TypeToken;
 

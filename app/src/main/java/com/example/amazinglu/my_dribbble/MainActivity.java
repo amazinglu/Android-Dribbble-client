@@ -1,9 +1,7 @@
 package com.example.amazinglu.my_dribbble;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.TestLooperManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -18,9 +16,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.example.amazinglu.my_dribbble.bucket_list.BucketListFragment;
-import com.example.amazinglu.my_dribbble.login.DribbbleFunc;
+import com.example.amazinglu.my_dribbble.auth_request.DribbbleFunc;
 import com.example.amazinglu.my_dribbble.shot_list.ShotListFragment;
 import com.example.amazinglu.my_dribbble.utils.ImageUtils;
 
