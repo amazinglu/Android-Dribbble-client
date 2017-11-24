@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.example.amazinglu.my_dribbble.base.DribbbleException;
+import com.example.amazinglu.my_dribbble.model.Bucket;
 import com.example.amazinglu.my_dribbble.model.Like;
 import com.example.amazinglu.my_dribbble.model.Shot;
 import com.example.amazinglu.my_dribbble.model.User;
@@ -29,6 +30,8 @@ import okhttp3.Response;
 
 public class DribbbleFunc {
 
+    public static final int COUNT_PER_PAGE = 12;
+
     private static final String SP_AUTH = "auth";
     private static final String KEY_ACCESS_TOKEN = "access_token";
     private static final String KEY_USER = "user";
@@ -41,6 +44,7 @@ public class DribbbleFunc {
     private static final TypeToken<List<Shot>> SHOT_LIST_TYPE = new TypeToken<List<Shot>>(){};
     private static final TypeToken<List<Like>> LIKE_LIST_TYPE = new TypeToken<List<Like>>(){};
     private static final TypeToken<Like> LIKE_TYPE = new TypeToken<Like>(){};
+    private static final TypeToken<List<Bucket>> BUCKET_LIST_TYPE = new TypeToken<List<Bucket>>(){};
 
     private static String accessToken;
     private static User user;
@@ -202,6 +206,11 @@ public class DribbbleFunc {
             likedShots.add(like.shot);
         }
         return likedShots;
+    }
+
+    public static List<Bucket> getUserBucket(int page) {
+        String url = USER_END_POINT + "/" + "buckets?page=" + page;
+        return parseResponse(makeGetRequest(url), BUCKET_LIST_TYPE);
     }
 
     public static Like likeShot(@NonNull String id) throws IOException {

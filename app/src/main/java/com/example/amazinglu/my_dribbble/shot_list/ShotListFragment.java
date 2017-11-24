@@ -42,8 +42,6 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
     @BindView(R.id.recycle_view) RecyclerView recyclerView;
     @BindView(R.id.recycler_view_refresh_container) SwipeRefreshLayout swipeRefreshLayout;
 
-    private static final int COUNT_PER_PAGE = 12;
-
     private ShotListAdapter adapter;
     private int listType;
 
@@ -133,7 +131,7 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
 
         @Override
         protected List<Shot> doJob(Void... params) throws DribbbleException, IOException {
-            page = refresh ? 1 : adapter.getDataCount() / COUNT_PER_PAGE + 1;
+            page = refresh ? 1 : adapter.getDataCount() / DribbbleFunc.COUNT_PER_PAGE + 1;
             switch (listType) {
                 case LIST_TYPE_POPULAR:
                     return DribbbleFunc.getShots(page);
@@ -146,14 +144,15 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
 
         @Override
         protected void onSuccess(List<Shot> shots) {
+            // set the show loading
+            adapter.setShowLoading(shots.size() == DribbbleFunc.COUNT_PER_PAGE);
+
             if (refresh) {
                 adapter.setData(shots);
                 swipeRefreshLayout.setRefreshing(false);
                 refresh = false;
             } else {
                 swipeRefreshLayout.setEnabled(true);
-                // set the show loading
-                adapter.setShowLoading(shots.size() == COUNT_PER_PAGE);
                 adapter.append(shots);
             }
         }
