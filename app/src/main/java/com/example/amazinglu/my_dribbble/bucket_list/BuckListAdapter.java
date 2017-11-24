@@ -104,6 +104,12 @@ public class BuckListAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
+    public void prepend(List<Bucket> buckets) {
+        // insert all the elements in buckets in the position 0 of data
+        this.data.addAll(0, buckets);
+        notifyDataSetChanged();
+    }
+
     public interface LoadMoreListener {
         void onLoadMore();
     }

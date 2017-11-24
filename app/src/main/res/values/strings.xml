@@ -23,4 +23,10 @@
 
     <string name="user_profile_picture">User profile picture</string>
     <string name="logout">Log out</string>
+
+    <string name="new_bucket_name">Bucket Name</string>
+    <string name="new_bucket_title">New Bucket</string>
+    <string name="new_bucket_description">Bucket Description</string>
+    <string name="new_bucket_positive_button">Create</string>
+    <string name="new_bucket_negative_button">Cancel</string>
 </resources>
