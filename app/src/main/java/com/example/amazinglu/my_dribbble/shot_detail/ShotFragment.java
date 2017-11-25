@@ -1,6 +1,7 @@
 package com.example.amazinglu.my_dribbble.shot_detail;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,6 +21,7 @@ import com.example.amazinglu.my_dribbble.base.DribbbleException;
 import com.example.amazinglu.my_dribbble.base.DribbbleTask;
 import com.example.amazinglu.my_dribbble.auth_request.DribbbleFunc;
 import com.example.amazinglu.my_dribbble.bucket_list.BucketListFragment;
+import com.example.amazinglu.my_dribbble.bucket_list.ChooseBucketActivity;
 import com.example.amazinglu.my_dribbble.model.Bucket;
 import com.example.amazinglu.my_dribbble.model.Shot;
 import com.example.amazinglu.my_dribbble.utils.ModelUtils;
@@ -45,6 +47,7 @@ public class ShotFragment extends Fragment {
     private boolean isLiking;
     private Shot shot;
     private ShotAdapter adapter;
+    private ArrayList<String> collectedBucketIds;
 
     public static ShotFragment newInstance(@NonNull Bundle args) {
         ShotFragment shotFragment = new ShotFragment();
@@ -92,10 +95,10 @@ public class ShotFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQ_CODE_BUCKET && resultCode == Activity.RESULT_OK) {
+            // the new bucketIds
             List<String> chosenBUcketIds = data.getStringArrayListExtra(BucketListFragment.KEY_CHOSEN_BUCKET_IDS);
             List<String> addBucketIds = new ArrayList<>();
             List<String> removeBucketIds = new ArrayList<>();
-            List<String> collectedBucketIds = adapter.getReadOnlyCollectedBucketIds();
 
             // get the add bucket ids
             for (String chosenBucketId : chosenBUcketIds) {
@@ -131,6 +134,32 @@ public class ShotFragment extends Fragment {
         if (!isLiking) {
             isLiking = true;
             AsyncTaskCompat.executeParallel(new LikeTask(shotId, like));
+        }
+    }
+
+    /**
+     * implicit intent
+     * do not 规定 intent 的对象
+     * android sytem will find all the activities that its intent filter has the action and type
+     * of this intent
+     * */
+    public void share(Context context) {
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, shot.title + " " + shot.html_url);
+        shareIntent.setType("text/plain");
+        context.startActivity(Intent.createChooser(shareIntent, "Share this amazing shot!"));
+    }
+
+    /**
+     * pass the collectedBUcketIds to BucketListFragment
+     * */
+    public void bucket() {
+        if (collectedBucketIds != null) {
+            Intent intent = new Intent(getContext(), ChooseBucketActivity.class);
+            intent.putStringArrayListExtra(BucketListFragment.KEY_CHOSEN_BUCKET_IDS,
+                    collectedBucketIds);
+            startActivityForResult(intent, REQ_CODE_BUCKET);
         }
     }
 
@@ -225,13 +254,25 @@ public class ShotFragment extends Fragment {
         }
 
         @Override
-        protected void onSuccess(List<String> collectedBucketIds) {
-            adapter.updateCollectedBucketIds(collectedBucketIds);
+        protected void onSuccess(List<String> result) {
+            updateCollectedBucketIds(result);
         }
 
         @Override
         protected void onFailed(DribbbleException e) {
             Snackbar.make(getView(), e.getMessage(), Snackbar.LENGTH_LONG).show();
+        }
+
+        public void updateCollectedBucketIds(List<String> result) {
+            if (collectedBucketIds == null) {
+                collectedBucketIds = new ArrayList<>();
+            }
+
+            collectedBucketIds.clear();
+            collectedBucketIds.addAll(result);
+
+            shot.bucketed = !result.isEmpty();
+            recyclerView.getAdapter().notifyDataSetChanged();
         }
     }
 
@@ -262,13 +303,27 @@ public class ShotFragment extends Fragment {
 
         @Override
         protected void onSuccess(Void aVoid) {
-            adapter.updateCollectedBucketIds(added, removed);
+            updateCollectedBucketIds(added, removed);
             setResult();
         }
 
         @Override
         protected void onFailed(DribbbleException e) {
             Snackbar.make(getView(), e.getMessage(), Snackbar.LENGTH_LONG).show();
+        }
+
+        public void updateCollectedBucketIds(@NonNull List<String> added,
+                                             @NonNull List<String> removed) {
+            if(collectedBucketIds == null) {
+                collectedBucketIds = new ArrayList<>();
+            }
+
+            collectedBucketIds.addAll(added);
+            collectedBucketIds.removeAll(removed);
+
+            shot.bucketed = !collectedBucketIds.isEmpty();
+            shot.buckets_count += added.size() - removed.size();
+            recyclerView.getAdapter().notifyDataSetChanged();
         }
     }
 
