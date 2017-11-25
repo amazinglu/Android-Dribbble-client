@@ -32,18 +32,17 @@ public class BuckListAdapter extends RecyclerView.Adapter {
     private boolean showLoading;
     private boolean isChoosingMode;
     private LoadMoreListener loadMoreListener;
-
-    public BuckListAdapter(List<Bucket> data) {
-        this.data = data;
-    }
+    private Context context;
 
     public BuckListAdapter(@NonNull List<Bucket> buckets,
+                           @NonNull Context context,
                            boolean isChoosingMode,
                            @NonNull LoadMoreListener loadMoreListener) {
         this.data = buckets;
         this.showLoading = true;
         this.isChoosingMode = isChoosingMode;
         this.loadMoreListener = loadMoreListener;
+        this.context = context;
     }
 
     @Override
@@ -89,15 +88,14 @@ public class BuckListAdapter extends RecyclerView.Adapter {
             /**
              * choosing mode
              * */
-            Context context = holder.itemView.getContext();
             if (isChoosingMode) {
                 bucketViewHolder.bucketChosen.setVisibility(View.VISIBLE);
                 /**
                  * the view of the choosing image view
                  * */
                 bucketViewHolder.bucketChosen.setImageDrawable(bucket.isChoosing
-                        ? ContextCompat.getDrawable(context, R.drawable.ic_check_box_black_24dp)
-                        : ContextCompat.getDrawable(context, R.drawable.ic_check_box_outline_blank_black_24dp));
+                        ? ContextCompat.getDrawable(getContext(), R.drawable.ic_check_box_black_24dp)
+                        : ContextCompat.getDrawable(getContext(), R.drawable.ic_check_box_outline_blank_black_24dp));
                 /**
                  * click the bucket
                  * */
@@ -114,10 +112,10 @@ public class BuckListAdapter extends RecyclerView.Adapter {
                     @Override
                     public void onClick(View view) {
                         // send the bucket id to shot list fragment
-                        Intent intent = new Intent(view.getContext(), BucketShotListActivity.class);
+                        Intent intent = new Intent(getContext(), BucketShotListActivity.class);
                         intent.putExtra(ShotListFragment.KEY_BUCKET_ID, bucket.id);
                         intent.putExtra(BucketShotListActivity.KEY_BUCKET_NAME, bucket.name);
-                        view.getContext().startActivity(intent);
+                        getContext().startActivity(intent);
                     }
                 });
             }
@@ -168,6 +166,10 @@ public class BuckListAdapter extends RecyclerView.Adapter {
             }
         }
         return selectBucketIds;
+    }
+
+    public Context getContext() {
+        return context;
     }
 
     public interface LoadMoreListener {

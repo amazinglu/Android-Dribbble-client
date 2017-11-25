@@ -94,6 +94,10 @@ public class ShotFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        /**
+         * get the result after choosing the bucket and save
+         * update the bucket info of current shot
+         * */
         if (requestCode == REQ_CODE_BUCKET && resultCode == Activity.RESULT_OK) {
             // the new bucketIds
             List<String> chosenBUcketIds = data.getStringArrayListExtra(BucketListFragment.KEY_CHOSEN_BUCKET_IDS);
@@ -138,6 +142,7 @@ public class ShotFragment extends Fragment {
     }
 
     /**
+     * click the bucket button
      * implicit intent
      * do not 规定 intent 的对象
      * android sytem will find all the activities that its intent filter has the action and type
@@ -152,6 +157,7 @@ public class ShotFragment extends Fragment {
     }
 
     /**
+     * click the bucket button
      * pass the collectedBUcketIds to BucketListFragment
      * */
     public void bucket() {

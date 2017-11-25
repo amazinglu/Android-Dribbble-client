@@ -16,13 +16,8 @@ import com.example.amazinglu.my_dribbble.shot_detail.ShotActivity;
 import com.example.amazinglu.my_dribbble.shot_detail.ShotFragment;
 import com.example.amazinglu.my_dribbble.utils.ImageUtils;
 import com.example.amazinglu.my_dribbble.utils.ModelUtils;
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.interfaces.DraweeController;
 import com.google.gson.reflect.TypeToken;
-
 import java.util.List;
-
-import static java.security.AccessController.getContext;
 
 public class ShotListAdapter extends RecyclerView.Adapter {
 
@@ -47,11 +42,11 @@ public class ShotListAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_SHOT) {
-            View view = LayoutInflater.from(parent.getContext()).
+            View view = LayoutInflater.from(getContext()).
                     inflate(R.layout.list_item_shot, parent, false);
             return new ShotViewHolder(view);
         } else {
-            View view = LayoutInflater.from(parent.getContext())
+            View view = LayoutInflater.from(getContext())
                     .inflate(R.layout.list_item_loading, parent, false);
             // since no view is in this view holder, use the system view holder is fine
             return new RecyclerView.ViewHolder(view) {};
@@ -76,8 +71,7 @@ public class ShotListAdapter extends RecyclerView.Adapter {
             shotViewHolder.cover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    Context context = holder.itemView.getContext();
-                    Intent intent = new Intent(shotListFragment.getContext(), ShotActivity.class);
+                    Intent intent = new Intent(getContext(), ShotActivity.class);
                     /**
                      * use JSON to transit object through activities
                      * */
@@ -132,5 +126,9 @@ public class ShotListAdapter extends RecyclerView.Adapter {
         this.showLoading = showLoading;
         // if the showLoading changes, no more loading will be exist
         notifyDataSetChanged();
+    }
+
+    private Context getContext() {
+        return shotListFragment.getContext();
     }
 }

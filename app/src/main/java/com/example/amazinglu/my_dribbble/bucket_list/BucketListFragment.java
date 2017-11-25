@@ -104,7 +104,7 @@ public class BucketListFragment extends Fragment {
         /**
          * initialize the adapter
          * */
-        adapter = new BuckListAdapter(new ArrayList<Bucket>(), isChoosingMode,
+        adapter = new BuckListAdapter(new ArrayList<Bucket>(), getContext(), isChoosingMode,
                 new BuckListAdapter.LoadMoreListener() {
             @Override
             public void onLoadMore() {
