@@ -34,4 +34,7 @@
     <string name="bucket_list_choosing_mode_menus_delete_title">Delete</string>
 
     <string name="choose_bucket">Choose Bucket</string>
+
+    <string name="delete_bucket_remind_msg">Do you want to delete the bucket!!</string>
+    <string name="delete_bucket_fragment_title">Delete current bucket</string>
 </resources>

@@ -23,6 +23,8 @@ import com.example.amazinglu.my_dribbble.base.DribbbleException;
 import com.example.amazinglu.my_dribbble.base.DribbbleTask;
 import com.example.amazinglu.my_dribbble.base.SpaceItemdecoration;
 import com.example.amazinglu.my_dribbble.auth_request.DribbbleFunc;
+import com.example.amazinglu.my_dribbble.bucket_list.BucketListFragment;
+import com.example.amazinglu.my_dribbble.bucket_list.NewBucketDialogFragment;
 import com.example.amazinglu.my_dribbble.model.Shot;
 import com.example.amazinglu.my_dribbble.shot_detail.ShotFragment;
 import com.example.amazinglu.my_dribbble.utils.ModelUtils;
@@ -38,8 +40,11 @@ import butterknife.ButterKnife;
 public class ShotListFragment extends android.support.v4.app.Fragment {
 
     public static final int REQ_CODE_SHOT = 100;
+    public static final int REQ_CODE_COMFRIN_DELETE = 101;
     public static final String KEY_LIST_TYPE = "listType";
     public static final String KEY_BUCKET_ID = "bucketId";
+    public static final String KEY_TARGET_FRAGMENT = "target_fragment";
+    public static final String KEY_DELETE_BUCKET_ID = "delete_bucket_id";
 
     public static final int LIST_TYPE_POPULAR = 1;
     public static final int LIST_TYPE_LIKED = 2;
@@ -50,6 +55,8 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
 
     private ShotListAdapter adapter;
     private int listType;
+    private String bucket_id;
+    private BucketListFragment bucketListFragment;
 
     public static ShotListFragment newInstance(int listType) {
         Bundle args = new Bundle();
@@ -96,6 +103,9 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         // get the listType
         listType = getArguments().getInt(KEY_LIST_TYPE);
+        if (listType == LIST_TYPE_BUCKET) {
+            bucket_id = getArguments().getString(KEY_BUCKET_ID);
+        }
 
         // disable the refresh when first load the fragment
         swipeRefreshLayout.setEnabled(false);
@@ -146,6 +156,15 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
                 }
             }
         }
+        /**
+         * delete the current bucket
+         * */
+        if (requestCode == REQ_CODE_COMFRIN_DELETE && resultCode == Activity.RESULT_OK) {
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra(KEY_DELETE_BUCKET_ID, bucket_id);
+            getActivity().setResult(Activity.RESULT_OK, resultIntent);
+            getActivity().finish();
+        }
     }
 
     @Override
@@ -155,7 +174,16 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
         }
     }
 
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.delete) {
+            DeleteBucketDialogFragment dialogFragment = DeleteBucketDialogFragment.newInstance();
+            dialogFragment.setTargetFragment(ShotListFragment.this, REQ_CODE_COMFRIN_DELETE);
+            dialogFragment.show(getFragmentManager(), DeleteBucketDialogFragment.TAG);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     /**
      * use AsyncTask, OkHttp and JSON to get the shot back from Dribbble API

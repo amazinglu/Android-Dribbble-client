@@ -26,6 +26,7 @@ import com.example.amazinglu.my_dribbble.base.DribbbleException;
 import com.example.amazinglu.my_dribbble.base.DribbbleTask;
 import com.example.amazinglu.my_dribbble.base.SpaceItemdecoration;
 import com.example.amazinglu.my_dribbble.model.Bucket;
+import com.example.amazinglu.my_dribbble.shot_list.ShotListFragment;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ public class BucketListFragment extends Fragment {
     public static final int REQ_CODE_DELETE_BUCKET = 200;
     public static final String KEY_CHOOSING_MODE = "choose_mode";
     public static final String KEY_CHOSEN_BUCKET_IDS = "chosen_bucket_ids";
+    public static final String KEY_FRAGMENT = "fragment";
 
     @BindView(R.id.bucket_recycler_view) RecyclerView recyclerView;
     @BindView(R.id.fab) FloatingActionButton floatingActionButton;
@@ -105,7 +107,7 @@ public class BucketListFragment extends Fragment {
         /**
          * initialize the adapter
          * */
-        adapter = new BuckListAdapter(new ArrayList<Bucket>(), getContext(), isChoosingMode,
+        adapter = new BuckListAdapter(new ArrayList<Bucket>(), this, isChoosingMode,
                 new BuckListAdapter.LoadMoreListener() {
             @Override
             public void onLoadMore() {
@@ -151,6 +153,11 @@ public class BucketListFragment extends Fragment {
             String bucketDescription = data.getStringExtra(NewBucketDialogFragment.KEY_BUCKET_DESCRIPTION);
             if (!TextUtils.isEmpty(bucketName)) {
                 AsyncTaskCompat.executeParallel(new NewBucketTask(bucketName, bucketDescription));
+            }
+        } else if (requestCode == REQ_CODE_DELETE_BUCKET && resultCode == Activity.RESULT_OK) {
+            String bucketId = data.getStringExtra(ShotListFragment.KEY_DELETE_BUCKET_ID);
+            if (!TextUtils.isEmpty(bucketId)) {
+                AsyncTaskCompat.executeParallel(new DeleteBucketTask(bucketId));
             }
         }
     }
@@ -262,5 +269,28 @@ public class BucketListFragment extends Fragment {
         }
     }
 
+    private class DeleteBucketTask extends DribbbleTask<Void, Void, Void> {
 
+        private String bucketId;
+
+        public DeleteBucketTask(String bucketId) {
+            this.bucketId = bucketId;
+        }
+
+        @Override
+        protected Void doJob(Void... params) throws DribbbleException, IOException {
+            DribbbleFunc.removeBucket(bucketId);
+            return null;
+        }
+
+        @Override
+        protected void onSuccess(Void aVoid) {
+            adapter.updateBucketList(bucketId);
+        }
+
+        @Override
+        protected void onFailed(DribbbleException e) {
+            Snackbar.make(getView(), e.getMessage(), Snackbar.LENGTH_LONG).show();
+        }
+    }
 }

@@ -5,23 +5,23 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.amazinglu.my_dribbble.R;
 import com.example.amazinglu.my_dribbble.model.Bucket;
+import com.example.amazinglu.my_dribbble.model.Shot;
 import com.example.amazinglu.my_dribbble.shot_list.ShotListFragment;
+import com.example.amazinglu.my_dribbble.utils.ModelUtils;
+import com.google.gson.reflect.TypeToken;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.security.AccessController.getContext;
-
-/**
- * Created by AmazingLu on 11/10/17.
- */
 
 public class BuckListAdapter extends RecyclerView.Adapter {
 
@@ -32,18 +32,17 @@ public class BuckListAdapter extends RecyclerView.Adapter {
     private boolean showLoading;
     private boolean isChoosingMode;
     private LoadMoreListener loadMoreListener;
-    private Context context;
     private BucketListFragment bucketListFragment;
 
     public BuckListAdapter(@NonNull List<Bucket> buckets,
-                           @NonNull Context context,
+                           @NonNull BucketListFragment bucketListFragment,
                            boolean isChoosingMode,
                            @NonNull LoadMoreListener loadMoreListener) {
         this.data = buckets;
         this.showLoading = true;
         this.isChoosingMode = isChoosingMode;
         this.loadMoreListener = loadMoreListener;
-        this.context = context;
+        this.bucketListFragment = bucketListFragment;
     }
 
     @Override
@@ -116,7 +115,10 @@ public class BuckListAdapter extends RecyclerView.Adapter {
                         Intent intent = new Intent(getContext(), BucketShotListActivity.class);
                         intent.putExtra(ShotListFragment.KEY_BUCKET_ID, bucket.id);
                         intent.putExtra(BucketShotListActivity.KEY_BUCKET_NAME, bucket.name);
-                        getContext().startActivity(intent);
+//                        intent.putExtra(BucketListFragment.KEY_FRAGMENT,
+//                                ModelUtils.toString(bucketListFragment, new TypeToken<BucketListFragment>(){}));
+                        bucketListFragment.startActivityForResult(intent,
+                                BucketListFragment.REQ_CODE_DELETE_BUCKET);
                     }
                 });
             }
@@ -170,7 +172,17 @@ public class BuckListAdapter extends RecyclerView.Adapter {
     }
 
     public Context getContext() {
-        return context;
+        return bucketListFragment.getContext();
+    }
+
+    public void updateBucketList(String bucketId) {
+        for (Bucket bucket : data) {
+            if (TextUtils.equals(bucketId, bucket.id)) {
+                data.remove(bucket);
+                break;
+            }
+        }
+        notifyDataSetChanged();
     }
 
     public interface LoadMoreListener {
