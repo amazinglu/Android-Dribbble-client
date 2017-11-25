@@ -1,6 +1,7 @@
 package com.example.amazinglu.my_dribbble.bucket_list;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -10,10 +11,13 @@ import android.view.ViewGroup;
 
 import com.example.amazinglu.my_dribbble.R;
 import com.example.amazinglu.my_dribbble.model.Bucket;
+import com.example.amazinglu.my_dribbble.shot_list.ShotListFragment;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.security.AccessController.getContext;
 
 /**
  * Created by AmazingLu on 11/10/17.
@@ -109,7 +113,11 @@ public class BuckListAdapter extends RecyclerView.Adapter {
                 bucketViewHolder.bucketCover.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        // go to the shot list fragment of the bucket
+                        // send the bucket id to shot list fragment
+                        Intent intent = new Intent(view.getContext(), BucketShotListActivity.class);
+                        intent.putExtra(ShotListFragment.KEY_BUCKET_ID, bucket.id);
+                        intent.putExtra(BucketShotListActivity.KEY_BUCKET_NAME, bucket.name);
+                        view.getContext().startActivity(intent);
                     }
                 });
             }

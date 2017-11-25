@@ -107,7 +107,7 @@ public class ShotAdapter extends RecyclerView.Adapter {
                 });
 
                 /**
-                 * click the share button
+                 * click the bucket button
                  * */
                 shotDetailViewHolder.bucketButton.setOnClickListener(new View.OnClickListener() {
                     @Override

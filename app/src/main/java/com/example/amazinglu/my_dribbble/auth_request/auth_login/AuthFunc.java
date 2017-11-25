@@ -16,10 +16,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-/**
- * Created by AmazingLu on 11/22/17.
- */
-
 public class AuthFunc {
 
     public static final int REQ_CODE = 100;

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.os.AsyncTaskCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,9 +36,11 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
 
     public static final int REQ_CODE_SHOT = 100;
     public static final String KEY_LIST_TYPE = "listType";
+    public static final String KEY_BUCKET_ID = "bucketId";
 
     public static final int LIST_TYPE_POPULAR = 1;
     public static final int LIST_TYPE_LIKED = 2;
+    public static final int LIST_TYPE_BUCKET = 3;
 
     @BindView(R.id.recycle_view) RecyclerView recyclerView;
     @BindView(R.id.recycler_view_refresh_container) SwipeRefreshLayout swipeRefreshLayout;
@@ -52,6 +55,16 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
         ShotListFragment shotListFragment = new ShotListFragment();
         shotListFragment.setArguments(args);
         return shotListFragment;
+    }
+
+    public static Fragment newBucketListInstance(String bucketId) {
+        Bundle args = new Bundle();
+        args.putInt(KEY_LIST_TYPE, LIST_TYPE_BUCKET);
+        args.putString(KEY_BUCKET_ID, bucketId);
+
+        ShotListFragment fragment = new ShotListFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Nullable
@@ -102,6 +115,10 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        /**
+         * hear back from shotAdapter
+         * update the shot count and like count
+         * */
         if (requestCode == REQ_CODE_SHOT && resultCode == Activity.RESULT_OK) {
             Shot updatedShot = ModelUtils.toObject(data.getStringExtra(ShotFragment.KEY_SHOT),
                     new TypeToken<Shot>(){});
@@ -137,6 +154,9 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
                     return DribbbleFunc.getShots(page);
                 case LIST_TYPE_LIKED:
                     return DribbbleFunc.getLikedShots(page);
+                case LIST_TYPE_BUCKET:
+                    String bucketId = getArguments().getString(KEY_BUCKET_ID);
+                    return DribbbleFunc.getBucketShots(bucketId, page);
                 default:
                     return DribbbleFunc.getShots(page);
             }

@@ -308,4 +308,12 @@ public class DribbbleFunc {
         }
     }
 
+    /**
+     * shot list of a bucket
+     * */
+    public static List<Shot> getBucketShots(@NonNull String bucketId, int page) {
+        String url = BUCKETS_END_POINT + "/" + bucketId + "/shots?page=" + page;
+        return parseResponse(makeGetRequest(url), SHOT_LIST_TYPE);
+    }
+
 }

@@ -263,6 +263,7 @@ public class ShotFragment extends Fragment {
         @Override
         protected void onSuccess(Void aVoid) {
             adapter.updateCollectedBucketIds(added, removed);
+            setResult();
         }
 
         @Override
