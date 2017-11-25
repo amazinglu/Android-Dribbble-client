@@ -273,12 +273,23 @@ public class DribbbleFunc {
         Response response = makeDeleteRequest(url, formBody);
     }
 
+    /**
+     * create a bucket
+     * */
     public static Bucket newBucket(@NonNull String name, @NonNull String description) {
         FormBody formBody = new FormBody.Builder()
                 .add(KEY_NAME, name)
                 .add(KEY_DESCRIPTION, description)
                 .build();
         return parseResponse(makePostRequest(BUCKETS_END_POINT, formBody), BUCKET_TYPE);
+    }
+
+    /**
+     * delete a bucket
+     * */
+    public static void removeBucket(@NonNull String bucketId) {
+        String url = BUCKETS_END_POINT + "/" + bucketId;
+        Response response = makeDeleteRequest(url);
     }
 
     /**

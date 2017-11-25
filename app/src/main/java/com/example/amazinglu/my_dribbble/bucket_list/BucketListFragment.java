@@ -40,6 +40,7 @@ import butterknife.ButterKnife;
 public class BucketListFragment extends Fragment {
 
     public static final int REQ_CODE_NEW_BUCKET = 100;
+    public static final int REQ_CODE_DELETE_BUCKET = 200;
     public static final String KEY_CHOOSING_MODE = "choose_mode";
     public static final String KEY_CHOSEN_BUCKET_IDS = "chosen_bucket_ids";
 

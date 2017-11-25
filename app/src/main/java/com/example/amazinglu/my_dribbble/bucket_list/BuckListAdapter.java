@@ -33,6 +33,7 @@ public class BuckListAdapter extends RecyclerView.Adapter {
     private boolean isChoosingMode;
     private LoadMoreListener loadMoreListener;
     private Context context;
+    private BucketListFragment bucketListFragment;
 
     public BuckListAdapter(@NonNull List<Bucket> buckets,
                            @NonNull Context context,

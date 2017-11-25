@@ -12,6 +12,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -65,6 +68,18 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
         ShotListFragment fragment = new ShotListFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        /**
+         * if the parent activity already do something to menus
+         * this function will tell the OD that this fragment would like to participate
+         * in populating the options menu by receiving a call to
+         * onCreateOptionsMenu(Menu, MenuInflater)
+         * */
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -132,6 +147,15 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
             }
         }
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        if (listType == LIST_TYPE_BUCKET) {
+            inflater.inflate(R.menu.shot_list_bucket_mode_menus, menu);
+        }
+    }
+
+
 
     /**
      * use AsyncTask, OkHttp and JSON to get the shot back from Dribbble API
