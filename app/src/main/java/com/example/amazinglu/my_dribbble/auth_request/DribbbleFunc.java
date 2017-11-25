@@ -37,6 +37,7 @@ public class DribbbleFunc {
     private static final String KEY_USER = "user";
     private static final String KEY_DESCRIPTION = "description";
     private static final String KEY_NAME = "name";
+    private static final String KEY_SHOT_ID = "shot_id";
 
     private static final String API_URL = "https://api.dribbble.com/v1/";
     private static final String USER_END_POINT = API_URL + "user";
@@ -134,6 +135,20 @@ public class DribbbleFunc {
         return makeRequest(request);
     }
 
+    private static Response makeDeleteRequest(String url, RequestBody requestBody) {
+        Request request = authRequestBuilder(url)
+                .delete(requestBody)
+                .build();
+        return makeRequest(request);
+    }
+
+    private static Response makePutRequest(String url, RequestBody requestBody) {
+        Request request = authRequestBuilder(url)
+                .put(requestBody)
+                .build();
+        return makeRequest(request);
+    }
+
     private static <T> T parseResponse(Response response, TypeToken<T> typeToken) {
         String responseString = null;
         try {
@@ -212,9 +227,50 @@ public class DribbbleFunc {
         return likedShots;
     }
 
+    /**
+     * get the user bucket base on page
+     * */
     public static List<Bucket> getUserBucket(int page) {
         String url = USER_END_POINT + "/" + "buckets?page=" + page;
         return parseResponse(makeGetRequest(url), BUCKET_LIST_TYPE);
+    }
+
+    /**
+     * get all the user buckets
+     * */
+    public static List<Bucket> getUserBucket() {
+        String url = USER_END_POINT + "/" + "buckets?per_page=" + Integer.MAX_VALUE;
+        return parseResponse(makeGetRequest(url), BUCKET_LIST_TYPE);
+    }
+
+    /**
+     * get all the buckets a shot has been put into
+     * */
+    public static List<Bucket> getShotBuckets(@NonNull String shotId) {
+        String url = SHOTS_END_POINT + "/" + shotId + "/buckets?per_page=" + Integer.MAX_VALUE;
+        return parseResponse(makeGetRequest(url), BUCKET_LIST_TYPE);
+    }
+
+    /**
+     * add a shot to a bucket
+     * */
+    public static void addBucketShot(@NonNull String bucketId, @NonNull String shotId) {
+        String url = BUCKETS_END_POINT + "/" + bucketId + "/shots";
+        FormBody formBody = new FormBody.Builder()
+                .add(KEY_SHOT_ID, shotId)
+                .build();
+        Response response = makePutRequest(url, formBody);
+    }
+
+    /**
+     * remove a shot from a bucket
+     * */
+    public static void removeBucketShot(@NonNull String bucketId, @NonNull String shotId) {
+        String url = BUCKETS_END_POINT + "/" + bucketId + "/shots";
+        FormBody formBody = new FormBody.Builder()
+                .add(KEY_SHOT_ID, shotId)
+                .build();
+        Response response = makeDeleteRequest(url, formBody);
     }
 
     public static Bucket newBucket(@NonNull String name, @NonNull String description) {
@@ -225,6 +281,9 @@ public class DribbbleFunc {
         return parseResponse(makePostRequest(BUCKETS_END_POINT, formBody), BUCKET_TYPE);
     }
 
+    /**
+     * like and unlike a shot
+     * */
     public static Like likeShot(@NonNull String id) throws IOException {
         String url = SHOTS_END_POINT + "/" + id + "/like";
         Response response = makePostRequest(url, new FormBody.Builder().build());

@@ -19,11 +19,17 @@ import com.example.amazinglu.my_dribbble.R;
 import com.example.amazinglu.my_dribbble.base.DribbbleException;
 import com.example.amazinglu.my_dribbble.base.DribbbleTask;
 import com.example.amazinglu.my_dribbble.auth_request.DribbbleFunc;
+import com.example.amazinglu.my_dribbble.bucket_list.BucketListFragment;
+import com.example.amazinglu.my_dribbble.model.Bucket;
 import com.example.amazinglu.my_dribbble.model.Shot;
 import com.example.amazinglu.my_dribbble.utils.ModelUtils;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,9 +40,11 @@ public class ShotFragment extends Fragment {
     @BindView(R.id.recycler_view_refresh_container) SwipeRefreshLayout swipeRefreshLayout;
 
     public static final String KEY_SHOT = "shot";
+    public static final int REQ_CODE_BUCKET = 100;
 
     private boolean isLiking;
     private Shot shot;
+    private ShotAdapter adapter;
 
     public static ShotFragment newInstance(@NonNull Bundle args) {
         ShotFragment shotFragment = new ShotFragment();
@@ -65,13 +73,46 @@ public class ShotFragment extends Fragment {
         shot = ModelUtils.toObject(getArguments().getString(KEY_SHOT),
                             new TypeToken<Shot>(){});
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new ShotAdapter(shot, this));
+
+        adapter = new ShotAdapter(shot, this);
+        recyclerView.setAdapter(adapter);
+
+        /**
+         * get all the bucket id of current shot
+         * */
+        AsyncTaskCompat.executeParallel(new LoadCollectedBucketIdsTask());
 
         /**
          * check the like status of a shot
          * */
         isLiking = true;
         AsyncTaskCompat.executeParallel(new CheckLikeTask());
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQ_CODE_BUCKET && resultCode == Activity.RESULT_OK) {
+            List<String> chosenBUcketIds = data.getStringArrayListExtra(BucketListFragment.KEY_CHOSEN_BUCKET_IDS);
+            List<String> addBucketIds = new ArrayList<>();
+            List<String> removeBucketIds = new ArrayList<>();
+            List<String> collectedBucketIds = adapter.getReadOnlyCollectedBucketIds();
+
+            // get the add bucket ids
+            for (String chosenBucketId : chosenBUcketIds) {
+                if (!collectedBucketIds.contains(chosenBucketId)) {
+                    addBucketIds.add(chosenBucketId);
+                }
+            }
+
+            // get the remove bucket ids
+            for (String collectedBucketId : collectedBucketIds) {
+                if (!chosenBUcketIds.contains(collectedBucketId)) {
+                    removeBucketIds.add(collectedBucketId);
+                }
+            }
+
+            AsyncTaskCompat.executeParallel(new UpdateBucketTask(addBucketIds, removeBucketIds));
+        }
     }
 
     /**
@@ -155,4 +196,79 @@ public class ShotFragment extends Fragment {
             Snackbar.make(getView(), e.getMessage(), Snackbar.LENGTH_LONG).show();
         }
     }
+
+    /**
+     * get the user's bucket and the bucket includes the current shot
+     * */
+    private class LoadCollectedBucketIdsTask extends DribbbleTask<Void, Void, List<String>> {
+
+        @Override
+        protected List<String> doJob(Void... params) throws DribbbleException, IOException {
+            List<Bucket> shotBuckets = DribbbleFunc.getShotBuckets(shot.id);
+            List<Bucket> userBuckets = DribbbleFunc.getUserBucket();
+
+            /**
+             * get the interception of shotBuckets and userBuckets
+             * */
+            Set<String> userBucketIds = new HashSet<>();
+            for (Bucket bucket : userBuckets) {
+                userBucketIds.add(bucket.id);
+            }
+            List<String> collectedBucketIds = new ArrayList<>();
+            for (Bucket bucket : shotBuckets) {
+                if (userBucketIds.contains(bucket.id)) {
+                    collectedBucketIds.add(bucket.id);
+                }
+            }
+
+            return collectedBucketIds;
+        }
+
+        @Override
+        protected void onSuccess(List<String> collectedBucketIds) {
+            adapter.updateCollectedBucketIds(collectedBucketIds);
+        }
+
+        @Override
+        protected void onFailed(DribbbleException e) {
+            Snackbar.make(getView(), e.getMessage(), Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    /**
+     * update the bucket list for a given shot
+     * */
+    private class UpdateBucketTask extends DribbbleTask<Void, Void, Void> {
+
+        private List<String> added;
+        private List<String> removed;
+
+        public UpdateBucketTask(@NonNull List<String> addBucketIds,
+                                @NonNull List<String> removeBucketIds) {
+            this.added = addBucketIds;
+            this.removed = removeBucketIds;
+        }
+
+        @Override
+        protected Void doJob(Void... params) throws DribbbleException, IOException {
+            for (String addId : added) {
+                DribbbleFunc.addBucketShot(addId, shot.id);
+            }
+            for (String removeId : removed) {
+                DribbbleFunc.removeBucketShot(removeId, shot.id);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onSuccess(Void aVoid) {
+            adapter.updateCollectedBucketIds(added, removed);
+        }
+
+        @Override
+        protected void onFailed(DribbbleException e) {
+            Snackbar.make(getView(), e.getMessage(), Snackbar.LENGTH_LONG).show();
+        }
+    }
+
 }

@@ -21,6 +21,8 @@ import com.example.amazinglu.my_dribbble.auth_request.DribbbleFunc;
 import com.example.amazinglu.my_dribbble.shot_list.ShotListFragment;
 import com.example.amazinglu.my_dribbble.utils.ImageUtils;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -153,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
                         setTitle(R.string.drawer_menus_like_title);
                         break;
                     case R.id.drawer_item_buckets:
-                        fragment = BucketListFragment.newInstance();
+                        fragment = BucketListFragment.newInstance(false, new ArrayList<String>());
                         setTitle(R.string.drawer_menus_bucket_title);
                         break;
                 }

@@ -29,4 +29,8 @@
     <string name="new_bucket_description">Bucket Description</string>
     <string name="new_bucket_positive_button">Create</string>
     <string name="new_bucket_negative_button">Cancel</string>
+
+    <string name="bucket_list_choosing_mode_menus_save_title">Save</string>
+
+    <string name="choose_bucket">Choose Bucket</string>
 </resources>

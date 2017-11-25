@@ -1,6 +1,8 @@
 package com.example.amazinglu.my_dribbble.bucket_list;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,15 +26,19 @@ public class BuckListAdapter extends RecyclerView.Adapter {
 
     private List<Bucket> data;
     private boolean showLoading;
+    private boolean isChoosingMode;
     private LoadMoreListener loadMoreListener;
 
     public BuckListAdapter(List<Bucket> data) {
         this.data = data;
     }
 
-    public BuckListAdapter(List<Bucket> buckets, LoadMoreListener loadMoreListener) {
+    public BuckListAdapter(@NonNull List<Bucket> buckets,
+                           boolean isChoosingMode,
+                           @NonNull LoadMoreListener loadMoreListener) {
         this.data = buckets;
         this.showLoading = true;
+        this.isChoosingMode = isChoosingMode;
         this.loadMoreListener = loadMoreListener;
     }
 
@@ -49,14 +55,21 @@ public class BuckListAdapter extends RecyclerView.Adapter {
         }
     }
 
+    /**
+     * note the warning for "final int position", it's for recycler view drag and drop
+     * after drag and drop onBindViewHolder will not be call again with the new position,
+     * that's why you should not assume this position is always fixed.
+     * in our case, we do not support drag and drop in bucket list because Dribbble API
+     * doesn't support reordering buckets, so using "final int position" is fine
+     * */
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         final int viewType = getItemViewType(position);
         if (viewType == VIEW_TYPE_LOADING) {
             // load something
             loadMoreListener.onLoadMore();
         } else {
-            Bucket bucket = data.get(position);
+            final Bucket bucket = data.get(position);
 
             // 0 -> 0 shot
             // 1 -> 1 shot
@@ -69,8 +82,37 @@ public class BuckListAdapter extends RecyclerView.Adapter {
             bucketViewHolder.bucketName.setText(bucket.name);
             bucketViewHolder.bucketShotCount.setText(bucketShotCountString);
 
-            // no need for checkbox yet
-            bucketViewHolder.bucketChosen.setVisibility(View.GONE);
+            /**
+             * choosing mode
+             * */
+            Context context = holder.itemView.getContext();
+            if (isChoosingMode) {
+                bucketViewHolder.bucketChosen.setVisibility(View.VISIBLE);
+                /**
+                 * the view of the choosing image view
+                 * */
+                bucketViewHolder.bucketChosen.setImageDrawable(bucket.isChoosing
+                        ? ContextCompat.getDrawable(context, R.drawable.ic_check_box_black_24dp)
+                        : ContextCompat.getDrawable(context, R.drawable.ic_check_box_outline_blank_black_24dp));
+                /**
+                 * click the bucket
+                 * */
+                bucketViewHolder.bucketCover.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        bucket.isChoosing = !bucket.isChoosing;
+                        notifyItemChanged(position);
+                    }
+                });
+            } else {
+                bucketViewHolder.bucketChosen.setVisibility(View.GONE);
+                bucketViewHolder.bucketCover.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // go to the shot list fragment of the bucket
+                    }
+                });
+            }
         }
     }
 
@@ -108,6 +150,16 @@ public class BuckListAdapter extends RecyclerView.Adapter {
         // insert all the elements in buckets in the position 0 of data
         this.data.addAll(0, buckets);
         notifyDataSetChanged();
+    }
+
+    public ArrayList<String> getSelectBucketIds() {
+        ArrayList<String> selectBucketIds = new ArrayList<>();
+        for (Bucket bucket : data) {
+            if (bucket.isChoosing) {
+                selectBucketIds.add(bucket.id);
+            }
+        }
+        return selectBucketIds;
     }
 
     public interface LoadMoreListener {

@@ -15,10 +15,17 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.example.amazinglu.my_dribbble.R;
+import com.example.amazinglu.my_dribbble.bucket_list.BucketListFragment;
+import com.example.amazinglu.my_dribbble.bucket_list.ChooseBucketActivity;
 import com.example.amazinglu.my_dribbble.model.Shot;
 import com.example.amazinglu.my_dribbble.utils.ImageUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 
 public class ShotAdapter extends RecyclerView.Adapter {
@@ -28,6 +35,8 @@ public class ShotAdapter extends RecyclerView.Adapter {
 
     private final Shot shot;
     private final ShotFragment shotFragment;
+
+    private ArrayList<String> collectedBUcketIds;
 
     public ShotAdapter(@NonNull Shot shot, @NonNull ShotFragment shotFragment) {
         this.shot = shot;
@@ -77,6 +86,13 @@ public class ShotAdapter extends RecyclerView.Adapter {
                 shotDetailViewHolder.bucketCount.setText(String.valueOf(shot.buckets_count));
                 shotDetailViewHolder.viewCount.setText(String.valueOf(shot.views_count));
 
+                Drawable bucketDrawble = shot.bucketed
+                        ? ContextCompat.getDrawable(shotDetailViewHolder.itemView.getContext(),
+                        R.drawable.ic_inbox_dribbble_18dp)
+                        : ContextCompat.getDrawable(shotDetailViewHolder.itemView.getContext(),
+                        R.drawable.ic_inbox_black_18dp);
+                shotDetailViewHolder.bucketButton.setImageDrawable(bucketDrawble);
+
                 ImageUtils.loadUserPicture(holder.itemView.getContext(),
                         shotDetailViewHolder.authorPicture,
                         shot.user.avatar_url);
@@ -87,6 +103,16 @@ public class ShotAdapter extends RecyclerView.Adapter {
                     @Override
                     public void onClick(View view) {
                         share(view.getContext());
+                    }
+                });
+
+                /**
+                 * click the share button
+                 * */
+                shotDetailViewHolder.bucketButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        bucket(view.getContext());
                     }
                 });
 
@@ -143,5 +169,47 @@ public class ShotAdapter extends RecyclerView.Adapter {
         shareIntent.putExtra(Intent.EXTRA_TEXT, shot.title + " " + shot.html_url);
         shareIntent.setType("text/plain");
         context.startActivity(Intent.createChooser(shareIntent, "Share this amazing shot!"));
+    }
+
+    /**
+     * pass the collectedBUcketIds to BucketListFragment
+     * */
+    private void bucket(Context context) {
+        if (collectedBUcketIds != null) {
+            Intent intent = new Intent(context, ChooseBucketActivity.class);
+            intent.putStringArrayListExtra(BucketListFragment.KEY_CHOSEN_BUCKET_IDS,
+                    collectedBUcketIds);
+            shotFragment.startActivityForResult(intent, ShotFragment.REQ_CODE_BUCKET);
+        }
+    }
+
+    public void updateCollectedBucketIds(List<String> collectedBucketIds) {
+        if (this.collectedBUcketIds == null) {
+            this.collectedBUcketIds = new ArrayList<>();
+        }
+
+        this.collectedBUcketIds.clear();
+        this.collectedBUcketIds.addAll(collectedBucketIds);
+
+        shot.bucketed = !this.collectedBUcketIds.isEmpty();
+        notifyDataSetChanged();
+    }
+
+    public void updateCollectedBucketIds(@NonNull List<String> added,
+                                         @NonNull List<String> removed) {
+        if(collectedBUcketIds == null) {
+            collectedBUcketIds = new ArrayList<>();
+        }
+
+        collectedBUcketIds.addAll(added);
+        collectedBUcketIds.removeAll(removed);
+
+        shot.bucketed = !collectedBUcketIds.isEmpty();
+        shot.buckets_count += added.size() - removed.size();
+        notifyDataSetChanged();
+    }
+
+    public List<String> getReadOnlyCollectedBucketIds() {
+        return Collections.unmodifiableList(collectedBUcketIds);
     }
 }

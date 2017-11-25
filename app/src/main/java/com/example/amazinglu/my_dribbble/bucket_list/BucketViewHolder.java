@@ -19,6 +19,7 @@ public class BucketViewHolder extends BaseViewHolder {
     @BindView(R.id.bucket_name) TextView bucketName;
     @BindView(R.id.bucket_shot_count) TextView bucketShotCount;
     @BindView(R.id.bucket_shot_chosen) ImageView bucketChosen;
+    @BindView(R.id.bucket_cover) View bucketCover;
 
     public BucketViewHolder(View itemView) {
         super(itemView);

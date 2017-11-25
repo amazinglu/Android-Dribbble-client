@@ -28,6 +28,7 @@
             android:windowSoftInputMode="adjustPan"/>
 
         <activity android:name=".shot_detail.ShotActivity"/>
+        <activity android:name=".bucket_list.ChooseBucketActivity" />
 
     </application>
 
