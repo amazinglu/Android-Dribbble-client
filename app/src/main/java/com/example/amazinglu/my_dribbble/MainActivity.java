@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.drawer_item_home:
                         fragment = ShotListFragment.newInstance(ShotListFragment.LIST_TYPE_POPULAR);
-                        setTitle(R.string.drawer_menus_home_title);
+                        setTitle(R.string.app_name);
                         break;
                     case R.id.drawer_item_likes:
                         fragment = ShotListFragment.newInstance(ShotListFragment.LIST_TYPE_LIKED);

@@ -196,6 +196,7 @@ share shots to other activities (ShotAdapter.share(...))
     - add a "refresh mode" on LoadShotTask class
 
 3. remember to disable the refresh when the view first create
+    and enable it after the data loading
 
 ============================================
 
@@ -238,7 +239,10 @@ like or dislike a shot
 
 bucket section 
 
-1. bucket not choosing mode
+has choosing mode and not choosing mode
+
+common in two modes:
+    - 
     
 
 

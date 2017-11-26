@@ -79,10 +79,12 @@ public class ShotAdapter extends RecyclerView.Adapter {
                 shotDetailViewHolder.description.setText(Html.fromHtml(
                         shot.description == null ? "" : shot.description));
                 shotDetailViewHolder.description.setMovementMethod(LinkMovementMethod.getInstance());
-
-                shotDetailViewHolder.likeCount.setText(String.valueOf(shot.likes_count));
-                shotDetailViewHolder.bucketCount.setText(String.valueOf(shot.buckets_count));
-                shotDetailViewHolder.viewCount.setText(String.valueOf(shot.views_count));
+                shotDetailViewHolder.likeCount.setText(shot.likes_count + " " +
+                        getContext().getResources().getString(R.string.shot_item_info_like_text));
+                shotDetailViewHolder.bucketCount.setText(shot.buckets_count + " " +
+                        getContext().getResources().getString(R.string.shot_item_info_bucket_text));
+                shotDetailViewHolder.viewCount.setText(shot.views_count + " " +
+                        getContext().getResources().getString(R.string.shot_item_info_view_text));
 
                 Drawable bucketDrawble = shot.bucketed
                         ? ContextCompat.getDrawable(getContext(),

@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import com.example.amazinglu.my_dribbble.R;
 import com.example.amazinglu.my_dribbble.base.DribbbleException;
 import com.example.amazinglu.my_dribbble.base.DribbbleTask;
+import com.example.amazinglu.my_dribbble.base.ShotListSpaceItemDecoration;
 import com.example.amazinglu.my_dribbble.base.SpaceItemdecoration;
 import com.example.amazinglu.my_dribbble.auth_request.DribbbleFunc;
 import com.example.amazinglu.my_dribbble.bucket_list.BucketListFragment;
@@ -111,7 +112,7 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
         swipeRefreshLayout.setEnabled(false);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.addItemDecoration(new SpaceItemdecoration(
+        recyclerView.addItemDecoration(new ShotListSpaceItemDecoration(
                 getResources().getDimensionPixelSize(R.dimen.spacing_medium)));
 
         /**

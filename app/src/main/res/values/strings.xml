@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My_Dribbble</string>
+    <string name="app_name">Amazing Dribbble :)</string>
 
     <string name="drawer_menu_home">Home</string>
     <string name="drawer_menu_likes">Likes</string>
@@ -37,4 +37,8 @@
 
     <string name="delete_bucket_remind_msg">Do you want to delete the bucket!!</string>
     <string name="delete_bucket_fragment_title">Delete current bucket</string>
+
+    <string name="shot_item_info_view_text">views</string>
+    <string name="shot_item_info_like_text">likes</string>
+    <string name="shot_item_info_bucket_text">buckets</string>
 </resources>

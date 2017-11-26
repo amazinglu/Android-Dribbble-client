@@ -4,46 +4,44 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/shot_view_count"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:paddingTop="@dimen/shot_action_drawable_top_icon_padding"
-            android:paddingBottom="@dimen/shot_action_drawable_top_icon_padding"
-            android:drawableTop="@drawable/ic_visibility_black_18dp"
-            android:drawablePadding="@dimen/shot_action_drawable_top_icon_padding"
-            tools:text="1000" />
+        android:id="@+id/shot_view_count"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:drawableTop="@drawable/ic_visibility_black_18dp"
+        android:drawablePadding="@dimen/shot_action_drawable_top_icon_padding"
+        tools:text="1000" />
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical">
 
             <ImageButton
                 android:id="@+id/shot_action_like"
                 android:layout_width="@dimen/shot_action_icon_size"
                 android:layout_height="@dimen/shot_action_icon_size"
-                android:src="@drawable/ic_favorite_border_black_18dp"
                 android:background="?attr/selectableItemBackground"
-                android:contentDescription="@string/like"/>
+                android:contentDescription="@string/like"
+                android:src="@drawable/ic_favorite_border_black_18dp" />
 
             <TextView
                 android:id="@+id/shot_like_count"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clickable="true"
                 android:gravity="center"
                 android:textColor="@android:color/holo_blue_dark"
-                android:clickable="true"
                 tools:text="1000" />
 
         </LinearLayout>
@@ -52,24 +50,24 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical">
 
             <ImageButton
                 android:id="@+id/shot_action_bucket"
                 android:layout_width="@dimen/shot_action_icon_size"
                 android:layout_height="@dimen/shot_action_icon_size"
-                android:src="@drawable/ic_inbox_black_18dp"
                 android:background="?attr/selectableItemBackground"
-                android:contentDescription="@string/bucket"/>
+                android:contentDescription="@string/bucket"
+                android:src="@drawable/ic_inbox_black_18dp" />
 
             <TextView
                 android:id="@+id/shot_bucket_count"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clickable="true"
                 android:gravity="center"
                 android:textColor="@android:color/holo_blue_dark"
-                android:clickable="true"
                 tools:text="1000" />
 
         </LinearLayout>
@@ -79,12 +77,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center"
-            android:paddingTop="@dimen/shot_action_drawable_top_icon_padding"
-            android:paddingBottom="@dimen/shot_action_drawable_top_icon_padding"
-            android:drawableTop="@drawable/ic_share_black_18dp"
-            android:drawablePadding="@dimen/shot_action_drawable_top_icon_padding"
             android:background="?attr/selectableItemBackground"
+            android:drawablePadding="@dimen/shot_action_drawable_top_icon_padding"
+            android:drawableTop="@drawable/ic_share_black_18dp"
+            android:gravity="center"
+            android:paddingBottom="@dimen/shot_action_drawable_top_icon_padding"
+            android:paddingTop="@dimen/shot_action_drawable_top_icon_padding"
             android:text="@string/share" />
 
     </LinearLayout>

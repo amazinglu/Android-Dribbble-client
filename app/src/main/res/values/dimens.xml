@@ -17,8 +17,8 @@
 
     <dimen name="drawer_header_height">192dp</dimen>
 
-    <dimen name="shot_action_icon_size">32dp</dimen>
-    <dimen name="shot_action_drawable_top_icon_padding">7dp</dimen>
+    <dimen name="shot_action_icon_size">54dp</dimen>
+    <dimen name="shot_action_drawable_top_icon_padding">15dp</dimen>
 
     <dimen name="loading_porogress_bar_size">24dp</dimen>
     <dimen name="loading_item_height">36dp</dimen>

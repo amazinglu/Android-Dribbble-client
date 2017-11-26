@@ -5,24 +5,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 /**
- * Created by AmazingLu on 11/9/17.
+ * Created by AmazingLu on 11/26/17.
  */
 
-public class SpaceItemdecoration extends RecyclerView.ItemDecoration {
+public class ShotListSpaceItemDecoration extends RecyclerView.ItemDecoration {
     private int space;
 
-    public SpaceItemdecoration(int space) {
+    public ShotListSpaceItemDecoration(int space) {
         this.space = space;
     }
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-        outRect.left = space;
-        outRect.right = space;
         outRect.bottom = space;
-
-        if (parent.getChildAdapterPosition(view) == 0) {
-            outRect.top = space;
-        }
     }
 }
