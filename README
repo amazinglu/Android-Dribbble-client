@@ -230,6 +230,17 @@ like or dislike a shot
 3. set the listener of the like button
     - use API to update the like status of the shot (LikeTask)
 
+** the shot instance in adapter is the reference of the shot instance in fragment
+    therefore, if we change the property in shot instance in fragment and notify the adapter
+    adapter know the change of the shot instance
+
+==============================================
+
+bucket section 
+
+1. bucket not choosing mode
+    
+
 
 
 

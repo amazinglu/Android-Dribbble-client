@@ -2,8 +2,11 @@ package com.example.amazinglu.my_dribbble.auth_request;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.webkit.CookieSyncManager;
 
 import com.example.amazinglu.my_dribbble.base.DribbbleException;
 import com.example.amazinglu.my_dribbble.model.Bucket;
@@ -14,6 +17,7 @@ import com.example.amazinglu.my_dribbble.utils.ModelUtils;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+import java.net.CookieManager;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
@@ -86,11 +90,21 @@ public class DribbbleFunc {
         storeUser(context, user);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public static void logout(@NonNull Context context) {
+
         storeAccessToken(context, null);
         storeUser(context, null);
         accessToken = null;
         user = null;
+
+        /**
+         * the cookie store the user name and password
+         * we need to clear the cookie
+         * so that the app will not automatically do the login
+         * and allow the user to input the usename and password
+         * */
+        clearCookie(context);
     }
 
     public static User getCurrentUser() {
@@ -196,6 +210,19 @@ public class DribbbleFunc {
 
     public static void storeUser(@NonNull Context context, @Nullable User user) {
         ModelUtils.save(context, KEY_USER, user);
+    }
+
+    public static void clearSharePreference(@NonNull Context context) {
+        SharedPreferences sharedPreferences = context.getApplicationContext()
+                .getSharedPreferences("PREFERENCE", Context.MODE_PRIVATE);
+        sharedPreferences.edit()
+                .clear()
+                .commit();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public static void clearCookie(@NonNull Context context) {
+        android.webkit.CookieManager.getInstance().removeAllCookies(null);
     }
 
     /**

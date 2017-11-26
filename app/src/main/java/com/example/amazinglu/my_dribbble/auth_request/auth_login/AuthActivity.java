@@ -102,4 +102,6 @@ public class AuthActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }

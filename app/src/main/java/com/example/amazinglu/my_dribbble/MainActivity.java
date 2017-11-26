@@ -1,9 +1,12 @@
 package com.example.amazinglu.my_dribbble;
 
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -129,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
          * click on logout button
          * */
         headerView.findViewById(R.id.nav_header_logout).setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View view) {
                 DribbbleFunc.logout(MainActivity.this);
