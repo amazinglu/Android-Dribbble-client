@@ -154,7 +154,11 @@ public class BucketListFragment extends Fragment {
             if (!TextUtils.isEmpty(bucketName)) {
                 AsyncTaskCompat.executeParallel(new NewBucketTask(bucketName, bucketDescription));
             }
-        } else if (requestCode == REQ_CODE_DELETE_BUCKET && resultCode == Activity.RESULT_OK) {
+        }
+        /**
+         * after delete a bucket in ShotListFragment
+         * */
+        if (requestCode == REQ_CODE_DELETE_BUCKET && resultCode == Activity.RESULT_OK) {
             String bucketId = data.getStringExtra(ShotListFragment.KEY_DELETE_BUCKET_ID);
             if (!TextUtils.isEmpty(bucketId)) {
                 AsyncTaskCompat.executeParallel(new DeleteBucketTask(bucketId));

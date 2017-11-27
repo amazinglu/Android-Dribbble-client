@@ -239,10 +239,69 @@ like or dislike a shot
 
 bucket section 
 
-has choosing mode and not choosing mode
+add button
 
-common in two modes:
-    - 
+    * BuckListFragment.floatingActionButton.setOnClickListener
+        - what to do when click the button
+        - set the target fragment of of NewBucketDialogFragment
+            - the target fregment is the fragement that will appear when the    NewBucketDialogFragment close (相当于startActivityForResult)
+        - go to NewBucketDialogFragment
+
+    * NewBucketDialogFragment
+        - input the new bucket info
+        - listener of "create" button
+            - pass the bucket info back to BuckListFragment and close NewBucketDialogFragment
+
+    * BuckListFragment.onActivityResult
+        - update the new bucket via API
+            - NewBucketTask (AsyncTask)
+                - upadate the new bucket to Dribbble server via API
+                - change the view by add the new bucket info to adapter
+
+not choosing mode
+    
+    <open bucket list fragment>
+    * MainActivity.setupDrawer().avigationView.setNavigationItemSelectedListener
+        - click the "bucket"
+        - create a new BucketListFragment
+
+    * BucketListFragment.onViewCreated()
+        - initialize the adapter
+            - LoadBucketTask (AsyncTask)
+                - load the user bucket
+                - pass the data to adapter and set up the view
+
+    <open the shot list when click a bucket>
+    * BucketListAdapter.bucketViewHolder.bucketCover.setOnClickListener (not choosing mode)
+        - create a new instance of ShotListFragment (bucket type)
+            - since intent can only link and pass data to activity
+                - frist go to BucketListActivity
+                - BucketListActivity create a new instance of ShotListFragment
+
+    <delete the bucket>
+    * set up the delete button
+        - ShotListFragment.onCreateOptionsMenu()
+            - inflate the view of delete button
+
+        - listener when click the delete button (ShotListFragment.onOptionsItemSelected())
+            - display the confrim dialog (DeleteBucketDialogFragment)
+                - confrim delete here
+                    click the "delete" button will go back to ShotListFragment.onActivityResult(...)
+
+    * after confirm delete (ShotListFragment.onActivityResult(...))
+        - pass the id of the delete bucket id to BucketListFragment
+        - finish the current activity
+
+    * update the bucket info in bucket list(BucketListFragment.onActivityResult(...))
+        - delete the bucket via API and update the view (BucketListFragment.DeleteBucketTask(...))
+
+choosing mode 
+
+    
+
+
+
+
     
 
 

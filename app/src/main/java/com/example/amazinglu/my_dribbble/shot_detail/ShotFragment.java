@@ -197,8 +197,11 @@ public class ShotFragment extends Fragment {
             isLiking = false;
             shot.liked = like;
             shot.likes_count += like ? 1 : -1;
+
+            // update the shot detail view
             recyclerView.getAdapter().notifyDataSetChanged();
 
+            // update the shot list view
             setResult();
         }
 
@@ -309,7 +312,9 @@ public class ShotFragment extends Fragment {
 
         @Override
         protected void onSuccess(Void aVoid) {
+            // update the view of shot detail
             updateCollectedBucketIds(added, removed);
+            // update the view of shot list
             setResult();
         }
 
