@@ -183,7 +183,6 @@ public class BucketListFragment extends Fragment {
          * */
         if (item.getItemId() == R.id.save) {
             ArrayList<String> chosenBucketIds = adapter.getSelectBucketIds();
-
             // pass the updated chosenBucketIds to somewhere
             Intent resultIntent = new Intent();
             resultIntent.putStringArrayListExtra(KEY_CHOSEN_BUCKET_IDS, chosenBucketIds);
