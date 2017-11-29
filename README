@@ -296,10 +296,36 @@ not choosing mode
         - delete the bucket via API and update the view (BucketListFragment.DeleteBucketTask(...))
 
 choosing mode 
-
     
+    <get all the bucket of the current shot>
+    * ShotFragment.LoadCollectedBucketIdsTask(...)
+        - get the bucket of the user
+        - get the bucket of the shot
+        - the combination is the bucket contains the current shot and belongs to the user
 
+    <pass the chosenBucketIds to BucketListFragment>
+    * ChooseBucketActivity
+        - use ChooseBucketActivity to get the info of the intent than create a new instance of BucketListFragment
 
+    <set up the view of BucketListFragment>
+    * BucketListFragment.onViewCreated(...)
+        - load the bucket via API (LoadBucketTask)
+            - set the bucket.isChoosing according to chosenBucketIds
+        - set the visibility of "bucket Choosing"
+
+    * set the listener of cliking the bucket
+        - change the bucket.isChoosing and update the view
+
+    * set the save button
+        - get the list of bucket id that is being choosing
+        - return this info to ShotFragment
+
+    <go back to Shot Fragment and update result>
+    * ShotFragment.onActivityResult(...)
+        - get the add bucket ids and remove bucket ids
+        - update the bucket list (UpdateBucketTask(...))
+    * ShotFragment.setResult()
+        - update the data in ShotListFragment
 
 
     

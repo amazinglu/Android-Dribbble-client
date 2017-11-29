@@ -208,6 +208,10 @@ public class ShotFragment extends Fragment {
 
             // update the shot list view
             setResult();
+
+            Snackbar.make(getView(), shot.liked ? getContext().getResources().getString(R.string.like_shot_msg)
+                            : getContext().getResources().getString(R.string.unlike_shot_msg),
+                    Snackbar.LENGTH_SHORT).show();
         }
 
         @Override
