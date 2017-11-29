@@ -14,9 +14,8 @@ public class BucketShotListActivity extends SingleFragmentActivity {
     @Override
     protected Fragment newFragment() {
         String bucketId = getIntent().getStringExtra(ShotListFragment.KEY_BUCKET_ID);
-        String targetFragment = getIntent().getStringExtra(ShotListFragment.KEY_TARGET_FRAGMENT);
         return bucketId == null ? ShotListFragment.newInstance(ShotListFragment.LIST_TYPE_POPULAR)
-                : ShotListFragment.newBucketListInstance(bucketId);
+                : ShotListFragment.newBucketListInstance(ShotListFragment.LIST_TYPE_BUCKET, bucketId);
     }
 
     @NonNull

@@ -49,6 +49,11 @@ public class ShotFragment extends Fragment {
     private ShotAdapter adapter;
     private ArrayList<String> collectedBucketIds;
 
+    /**
+     * create a new instance of ShotFragment
+     * */
+    private ShotFragment() {}
+
     public static ShotFragment newInstance(@NonNull Bundle args) {
         ShotFragment shotFragment = new ShotFragment();
         /**
@@ -123,7 +128,7 @@ public class ShotFragment extends Fragment {
     }
 
     /**
-     * set the result intent to update the like and bucket count for shot list
+     * set the result intent to update the like and bucket count in shotListFragment
      * */
     private void setResult() {
         Intent resultIntent = new Intent();
@@ -132,7 +137,7 @@ public class ShotFragment extends Fragment {
     }
 
     /**
-     * what to do when click the like button
+     * like button listener
      * */
     public void like(@NonNull String shotId, boolean like) {
         if (!isLiking) {
@@ -142,7 +147,7 @@ public class ShotFragment extends Fragment {
     }
 
     /**
-     * click the bucket button
+     * share button listener
      * implicit intent
      * do not 规定 intent 的对象
      * android sytem will find all the activities that its intent filter has the action and type
@@ -157,7 +162,7 @@ public class ShotFragment extends Fragment {
     }
 
     /**
-     * click the bucket button
+     * bucket button listener
      * pass the collectedBUcketIds to BucketListFragment
      * */
     public void bucket() {
@@ -170,7 +175,7 @@ public class ShotFragment extends Fragment {
     }
 
     /**
-     * update the info of like and unlike via HTTP request
+     * update the status of like and unlike task
      * */
     private class LikeTask extends DribbbleTask<Void, Void, Void> {
 
@@ -213,7 +218,7 @@ public class ShotFragment extends Fragment {
     }
 
     /**
-     * get the like status of a shot via HTTP get request
+     * get the like status of current shot task
      * */
     private class CheckLikeTask extends DribbbleTask<Void, Void, Boolean> {
         @Override
@@ -236,7 +241,7 @@ public class ShotFragment extends Fragment {
     }
 
     /**
-     * get the user's bucket and the bucket includes the current shot
+     * get the user's bucket and the bucket includes the current shot task
      * */
     private class LoadCollectedBucketIdsTask extends DribbbleTask<Void, Void, List<String>> {
 

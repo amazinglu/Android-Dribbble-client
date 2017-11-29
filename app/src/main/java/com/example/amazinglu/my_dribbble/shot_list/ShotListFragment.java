@@ -59,6 +59,11 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
     private String bucket_id;
     private BucketListFragment bucketListFragment;
 
+    /**
+     * create a new instance of ShotListFragment (popular and like type)
+     * */
+    private ShotListFragment() {}
+
     public static ShotListFragment newInstance(int listType) {
         Bundle args = new Bundle();
         args.putInt(KEY_LIST_TYPE, listType);
@@ -68,9 +73,12 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
         return shotListFragment;
     }
 
-    public static Fragment newBucketListInstance(String bucketId) {
+    /**
+     * create a new instance of ShotListFragment (bucket type)
+     * */
+    public static Fragment newBucketListInstance(int listType, String bucketId) {
         Bundle args = new Bundle();
-        args.putInt(KEY_LIST_TYPE, LIST_TYPE_BUCKET);
+        args.putInt(KEY_LIST_TYPE, listType);
         args.putString(KEY_BUCKET_ID, bucketId);
 
         ShotListFragment fragment = new ShotListFragment();
@@ -102,7 +110,9 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        // get the listType
+        /**
+         * get the listType
+         * */
         listType = getArguments().getInt(KEY_LIST_TYPE);
         if (listType == LIST_TYPE_BUCKET) {
             bucket_id = getArguments().getString(KEY_BUCKET_ID);
@@ -116,7 +126,7 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
                 getResources().getDimensionPixelSize(R.dimen.spacing_medium)));
 
         /**
-         * refresh the data
+         * refresh data listener
          * */
         // set the refresh to fail when first load the shot
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -127,7 +137,7 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
         });
 
         /**
-         * load more data
+         * set the adapter
          * */
         adapter = new ShotListAdapter(new ArrayList<Shot>(), this,
                 new ShotListAdapter.LoadMoreListener() {
@@ -158,6 +168,7 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
             }
         }
         /**
+         * hear back from delete bucket dialog
          * delete the current bucket
          * */
         if (requestCode == REQ_CODE_COMFRIN_DELETE && resultCode == Activity.RESULT_OK) {
@@ -168,6 +179,9 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
         }
     }
 
+    /**
+     * buttons on option menus
+     * */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if (listType == LIST_TYPE_BUCKET) {
@@ -187,9 +201,8 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
     }
 
     /**
-     * use AsyncTask, OkHttp and JSON to get the shot back from Dribbble API
+     * load shot task
      * */
-
     private class LoadShotTask extends DribbbleTask<Void, Void, List<Shot>> {
 
         private boolean refresh;

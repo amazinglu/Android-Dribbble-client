@@ -54,9 +54,10 @@ public class BucketListFragment extends Fragment {
     private boolean isChoosingMode;
     private List<String> chosenBucketIds;
 
-    public static BucketListFragment newInstance() {
-        return new BucketListFragment();
-    }
+    /**
+     * create a new instance of fragment
+     */
+    private BucketListFragment() {}
 
     public static Fragment newInstance(boolean isChoosingMode,
                                        @NonNull ArrayList<String> chosenBucketIds) {
@@ -90,7 +91,8 @@ public class BucketListFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         isChoosingMode = getArguments().getBoolean(KEY_CHOOSING_MODE);
         /**
-         * get the bucket id that was chosen for this shot
+         * in choosing mode
+         * get the bucket ids that contains the current shot
          * */
         if (isChoosingMode) {
             chosenBucketIds = getArguments().getStringArrayList(KEY_CHOSEN_BUCKET_IDS);
@@ -105,7 +107,7 @@ public class BucketListFragment extends Fragment {
         recyclerView.addItemDecoration(new SpaceItemdecoration(
                 getResources().getDimensionPixelSize(R.dimen.spacing_medium)));
         /**
-         * initialize the adapter
+         * set the adapter
          * */
         adapter = new BuckListAdapter(new ArrayList<Bucket>(), this, isChoosingMode,
                 new BuckListAdapter.LoadMoreListener() {
@@ -117,7 +119,7 @@ public class BucketListFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         /**
-         * click the add bucket button
+         * add bucket button listener
          * */
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,7 +134,7 @@ public class BucketListFragment extends Fragment {
         });
 
         /**
-         * click the refresh
+         * refresh listener
          * */
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -145,7 +147,7 @@ public class BucketListFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         /**
-         * back from dialog
+         * hear back from add bucket dialog
          * update the new bucket to Dribbble API
          * */
         if (requestCode == REQ_CODE_NEW_BUCKET && resultCode == Activity.RESULT_OK) {
@@ -156,6 +158,7 @@ public class BucketListFragment extends Fragment {
             }
         }
         /**
+         * hear back from ShotListFragment (bucket type)
          * after delete a bucket in ShotListFragment
          * */
         if (requestCode == REQ_CODE_DELETE_BUCKET && resultCode == Activity.RESULT_OK) {
@@ -166,6 +169,9 @@ public class BucketListFragment extends Fragment {
         }
     }
 
+    /**
+     * buttons in toolbar menus
+     * */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         /**
@@ -193,6 +199,9 @@ public class BucketListFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * load the bucket task
+     * */
     private class LoadBucketTask extends DribbbleTask<Void, Void, List<Bucket>> {
 
         private int page;
@@ -246,6 +255,9 @@ public class BucketListFragment extends Fragment {
         }
     }
 
+    /**
+     * add new bucket task
+     * */
     private class NewBucketTask extends DribbbleTask<Void, Void, Bucket> {
 
         private String bucketName;
@@ -272,6 +284,9 @@ public class BucketListFragment extends Fragment {
         }
     }
 
+    /**
+     * delete bucket task
+     * */
     private class DeleteBucketTask extends DribbbleTask<Void, Void, Void> {
 
         private String bucketId;
