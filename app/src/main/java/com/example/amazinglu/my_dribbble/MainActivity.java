@@ -1,5 +1,6 @@
 package com.example.amazinglu.my_dribbble;
 
+import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -132,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
          * click on logout button
          * */
         headerView.findViewById(R.id.nav_header_logout).setOnClickListener(new View.OnClickListener() {
+            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View view) {

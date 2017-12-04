@@ -5,10 +5,6 @@ import android.support.annotation.NonNull;
 import java.util.Date;
 import java.util.Map;
 
-/**
- * Created by AmazingLu on 11/9/17.
- */
-
 public class Shot {
 
     public static final String IMAGE_NORMAL = "normal";

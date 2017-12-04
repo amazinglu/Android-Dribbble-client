@@ -162,6 +162,9 @@ public class ShotListFragment extends android.support.v4.app.Fragment {
                 if (TextUtils.equals(shot.id, updatedShot.id)) {
                     shot.likes_count = updatedShot.likes_count;
                     shot.buckets_count = updatedShot.buckets_count;
+                    if (listType == LIST_TYPE_LIKED) {
+                        adapter.getData().remove(shot);
+                    }
                     adapter.notifyDataSetChanged();
                     return;
                 }
